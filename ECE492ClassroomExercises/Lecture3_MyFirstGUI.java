@@ -11,6 +11,9 @@
 // apparently M1 Macs have issues running other versions of Java and must be updated to function properly 
 
 // the button still does not have a red background and I cannot figure out why this is. It should be working but is not. 
+	// Issue solved: apparently Mac has issues with this in particular and I am not sure why, but to fix this I had to add two lines to the button color code
+	// and tell it to not paint the border around the button and to set it to be opaque 
+	// apparently these things are not assumed by default on mac but work fine on PC
 
 
 import javax.swing.*;
@@ -28,22 +31,15 @@ import java.awt.event.*;
 
 public class Lecture3_MyFirstGUI implements ActionListener 
 {
-	// Declare the program's "instance" variables outside of any method. (You can declare FIELDS outside of
-	// a method but you cannot write any CODE outside of a method.)
-	
+	// Declare the program's "instance" variables outside of any method. (You can declare FIELDS outside of a method but you cannot write any CODE outside of a method.)
 	// These are the POINTER fields to the GUI window and the GUI objects that will go in that window.
-	
-	// It is the pointer varibles that are the instance variables. The actual window and button etc. OBJECTS
-	// are, like our MyFirstGUI program, created in DYNAMIC storage, and those objects are used by us but are
-	// separate from our MyFirstGUI program object. We are allowed to create/load these GUI objects here because
-	// we are "initializing" the pointer FIELDS.
-	
-	// This is like we would say int x = 5; to not only declare an int field called x but to also 
-	// assign an initial value to it. And if we need to access the x field from code *anywhere* in our program
-	// by *any* thread, we need to do the declaration BETWEEN methods to make x an "instance"/program variable.
-	
-	// A "local" variable allocated on some thread's STACK is ONLY accessable by THAT thread. And that field is
-	// ERASED when that thread exits that method. Sometimes that's good, sometimes it's not.
+	// It is the pointer varibles that are the instance variables. The actual window and button etc. OBJECTS are, like our MyFirstGUI program, created in DYNAMIC storage, 
+		// and those objects are used by us but are separate from our MyFirstGUI program object. We are allowed to create/load these GUI objects here because we are "initializing" 
+		// the pointer FIELDS.
+	// This is like we would say int x = 5; to not only declare an int field called x but to also  assign an initial value to it. And if we need to access the x field from 
+		// code *anywhere* in our program by *any* thread, we need to do the declaration BETWEEN methods to make x an "instance"/program variable.
+	// A "local" variable allocated on some thread's STACK is ONLY accessable by THAT thread. And that field is ERASED when that thread exits that method. Sometimes that's 
+		// good, sometimes it's not.
 	
 	
 	// "Program/"instance" variables allocated in my program
@@ -77,38 +73,36 @@ public class Lecture3_MyFirstGUI implements ActionListener
 	  	window.setVisible(true);   // show the window!
 	  	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 					// terminate the program when the user
 		                                                        				// manually closes the window.
-	  	button.addActionListener(this);    // give address of MyFirstGUI program to the button program.
-	  	textField.addActionListener(this); // give address of MyFirstGUI program to the textfield program.
-	  	
+	  	button.addActionListener(this);    										// give address of MyFirstGUI program to the button program.
+	  	textField.addActionListener(this); 										// give address of MyFirstGUI program to the textfield program.
 	} // end of constructor method
 
 	
-	public void actionPerformed(ActionEvent ae)		// buttons etc will call here
+	public void actionPerformed(ActionEvent ae)	// buttons etc will call here
 	{	
 		System.out.println("Hello from the actionPerformed() method!");
-		if (ae.getSource() == button)    // compare address of calling GUI object to identify it.
+		if (ae.getSource() == button)    										// compare address of calling GUI object to identify it.
 		   {
 		   System.out.println("The button has been pressed.");
-		   textArea.setText("The button has been pressed."); // write text on the GUI!
+		   textArea.setText("The button has been pressed."); 					// write text on the GUI!
 		   }
-		// And, once we have read input from the textField, we should clear it so the user
-		//  doesn't have to do that manually before they enter the next input.
-		if (ae.getSource() == textField) // compare address of calling GUI object to identify it.
+		// And, once we have read input from the textField, we should clear it so the user doesn't have to do that manually before they enter the next input.
+		if (ae.getSource() == textField) 										// compare address of calling GUI object to identify it.
 		   {
-		   String input = textField.getText(); // Read text from the GUI!
+		   String input = textField.getText(); 									// Read text from the GUI!
 		   System.out.println("Data has been entered in the textField: '" + input + "'");
-		   textField.setText(""); // clear input area
-		   textArea.setText("Data entered was:  \n" + input); // overwrite previous text in textArea.
+		   textField.setText(""); 												// clear input area
+		   textArea.setText("Data entered was:  \n" + input); 					// overwrite previous text in textArea.
 		   }
-		
 	}	// End of ActionPerformed
 
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) // main() is loaded into STATIC memory and then called by the Java CommandLineLoader. (actually all the STATIC parts of the class are loaded)
 	{
-		// TODO Auto-generated method stub
-		new Lecture3_MyFirstGUI();
-
+		//Lecture3_MyFirstGUI mfg = new Lecture3_MyFirstGUI(); // Your main() METHOD (in STATIC) then calls "new" loader to load the NON-STATIC parts of the MyFirstGUI class into DYNAMIC memory
+		new Lecture3_MyFirstGUI();												// instantiates the above code, essentially tells it to create the GUI described above
+																				// the longer form above is only necessary if you are doing more with that object later
+		
 	} // end of main	
 
 } // end of class		
