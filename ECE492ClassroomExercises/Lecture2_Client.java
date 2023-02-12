@@ -2,7 +2,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Lecture2Client 
+public class Lecture2_Client 
 {
 
 	public static void main(String[] args) throws Exception
