@@ -13,8 +13,9 @@
 // the button still does not have a red background and I cannot figure out why this is. It should be working but is not. 
 
 
-
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 //import java.awt.Color;		// ""awt" = Abstract Windowing Toolkit
 //import java.awt.Font;
@@ -24,10 +25,6 @@
 //import javax.swing.JFrame;
 //import javax.swing.JTextArea;
 //import javax.swing.JTextField;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
 public class Lecture3_MyFirstGUI implements ActionListener 
 {
@@ -59,22 +56,27 @@ public class Lecture3_MyFirstGUI implements ActionListener
 	public Lecture3_MyFirstGUI() // my CONSTRUCTOR method! (called by the loader)
 	// This Method will be  will be in the program object in DYNAMIC Memory
 	{
-		System.out.println("Hello from the MyFirstGUI program constructor!");		// print to console (not GUI)
+		System.out.println("Hello from the MyFirstGUI program constructor!");	// print to console (not GUI)
 		window.getContentPane().add(button,   "North");
 		window.getContentPane().add(textArea, "Center");
 		window.getContentPane().add(textField,"South");     
 		window.setSize(500,400);   // width,height
 		window.setLocation(500,0); // x,y (x is "to the right of the left margin, y is "down-from-the-top")
 		
-		button.setBackground(Color.red);											// ** PROBLEM LINE **
+		button.setBackground(Color.red);										// ** PROBLEM LINE **
+		button.setBorderPainted(false);
+		button.setOpaque(true);													// apparently these two additional lines are necessary for it to run properly on mac only
+		button.setForeground(Color.BLACK);										// this works! Why doesn't the background color work?!?
+		//btn[i].setBackground(Color.RGBtoHSB(int, int, int, float[]));			// more complex method of assigning colors with RGB values
 		
 	  	textField.setBackground(Color.yellow);
+	  	//textField.setBackground(Color.GREEN);									// can be caps or lowercase
+	  	
 	  	textArea.setFont(new Font("default", Font.BOLD, 20)); // 20 is the font size
 	  	textArea.setEditable(false); // keep cursor out (user can't modify)
 	  	window.setVisible(true);   // show the window!
-	  	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 	// terminate the program when the user
-		                                                        // manually closes the window.
-	  	
+	  	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 					// terminate the program when the user
+		                                                        				// manually closes the window.
 	  	button.addActionListener(this);    // give address of MyFirstGUI program to the button program.
 	  	textField.addActionListener(this); // give address of MyFirstGUI program to the textfield program.
 	  	
