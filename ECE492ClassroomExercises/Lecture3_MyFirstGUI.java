@@ -28,7 +28,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-// test comment to check github 3
+// test comment to check github 4
 public class Lecture3_MyFirstGUI implements ActionListener 
 {
 	// Declare the program's "instance" variables outside of any method. (You can declare FIELDS outside of
