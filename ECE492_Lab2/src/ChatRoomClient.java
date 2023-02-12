@@ -27,4 +27,4 @@ public class ChatRoomClient implements ActionListener
 	} // end of main
 
 } // end of class 
-// test commit
+// test commit 2
