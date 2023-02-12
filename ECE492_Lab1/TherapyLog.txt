@@ -21,3 +21,6 @@ Question was: 'test window 2 Q2' Therapist answer was: 'I don't think so'
 
 New therapy session on Mon Feb 06 20:54:07 EST 2023
 Question was: 'test eclipse 3' Therapist answer was: 'Of course'
+
+New therapy session on Sun Feb 12 12:53:49 EST 2023
+Question was: 'test' Therapist answer was: 'Why not?'

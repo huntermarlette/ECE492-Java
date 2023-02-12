@@ -1,5 +1,7 @@
 
-
+// ECE492 Java Lab 2 - Chat Room Client - Spring 2023
+// Hunter Marlette
+// Student ID # 200289830
 
 import javax.swing.*;
 import java.awt.*;
