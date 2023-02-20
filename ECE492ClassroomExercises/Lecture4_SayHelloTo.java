@@ -53,11 +53,11 @@ public class Lecture4_SayHelloTo {
 	      {
 	      System.out.println(fnfe);      // print the Exception object as the error message
 	      }                              // Execution will continue after this exception.
-//	  catch (InvalidPasswordException ipe) 
-//	      {
-//	      System.out.println(ipe);       // print the Exception object as the error message
-//	      return;                        // EXECUTION WILL *NOT* CONTINUE AFTER THIS EXCEPTION!
-//	      }
+	  catch (InvalidPasswordException ipe) 
+	      {
+	      System.out.println(ipe);       // print the Exception object as the error message
+	      return;                        // EXECUTION WILL *NOT* CONTINUE AFTER THIS EXCEPTION!
+	      }
 	  catch (NumberFormatException nfe)
 	      {
 	      System.out.println(nfe);      // print the Exception object as the error message
