@@ -1,5 +1,6 @@
+import java.io.*;
 
-// there was no code written in this actual lecture but the lecture document did have one
+// there was no code written in this actual lecture but the lecture document did have some
 
 public class Lecture4_SayHelloTo {
 
@@ -35,5 +36,38 @@ public class Lecture4_SayHelloTo {
 	  System.out.println("Have a nice day!");
 	  }	 // end of main
 	
+	
+	
+	
+	
+	
+	public void someMethod () throws Exception
+	  {
+	  try {
+	      // code statement #1 
+	      // code statement #2
+	      // code statement #3
+	      // code statement #4
+	      }
+	  catch (FileNotFoundException fnfe) // This is the beginning of a catch GROUP
+	      {
+	      System.out.println(fnfe);      // print the Exception object as the error message
+	      }                              // Execution will continue after this exception.
+	  catch (InvalidPasswordException ipe) 
+	      {
+	      System.out.println(ipe);       // print the Exception object as the error message
+	      return;                        // EXECUTION WILL *NOT* CONTINUE AFTER THIS EXCEPTION!
+	      }
+	  catch (NumberFormatException nfe)
+	      {
+	      System.out.println(nfe);      // print the Exception object as the error message
+	      }                             // This is the end of this catch GROUP.
+	  // following code - execution will continue here after try code if 1) no exception 2) fnfe or 3) nfe but NOT if 
+	  	//the exception was InvalidPasswordExcepion because that catch block has a return statement at the bottom.
+	  	// ...
+	  }
 
+	
+	
+	
 } // end of class
