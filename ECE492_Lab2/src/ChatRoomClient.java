@@ -30,7 +30,7 @@ public class ChatRoomClient extends JFrame implements ActionListener
     
 	public ChatRoomClient(String serverAddress, String clientName, String password) throws Exception // My constructor method
 	{
-		if (hostAddress.contains(" ") || clientName.contains(" ") || password.contains(" "))
+		if (serverAddress.contains(" ") || clientName.contains(" ") || password.contains(" "))
 		{
 		    throw new IllegalArgumentException("Parameters may not contain blanks."); // also returns.
 		}
