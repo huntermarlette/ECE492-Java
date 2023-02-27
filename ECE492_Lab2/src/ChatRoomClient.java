@@ -23,9 +23,9 @@ public class ChatRoomClient extends JFrame implements ActionListener
 	int maxFontSize = 50;
 	int minFontSize = 5;
 	
-	private JTextArea chatBox;
-    private JTextField messageField;
-    private JButton sendButton;
+	//private JTextArea chatBox;
+    //private JTextField messageField;
+    //private JButton sendButton;
     
     
 	public ChatRoomClient(String hostAddress, String clientName, String password) throws Exception // My constructor method
@@ -34,6 +34,13 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		{
 		    throw new IllegalArgumentException("Parameters may not contain blanks."); // also returns.
 		}
+		System.out.println("bookmark 3");
+		String serverAddress = "localhost";		
+		// this may be an error in using "serverAddress" and "hostAddres" as the same variable but I will keep this temporarily 
+		
+		System.out.println("Connecting to the chat room server at " + serverAddress + " on port 2222.");
+		s = new Socket(serverAddress, 2222); // connect (server net address is specified by user but server port # is assumed)
+		System.out.println("bookmark 4");
 		
 	} // end of constructor
 
@@ -47,16 +54,20 @@ public class ChatRoomClient extends JFrame implements ActionListener
 	
 	public static void main(String[] args) throws Exception 
 	{
+		System.out.println("bookmark 0");
 		// I could shorten these if statements into single line commands
 		if (args.length !=3) 
 		{
 			System.out.println("prompt the user to restart and instruct them on which parameters to use");		// needs to change!!! **************
 		}
-		
-		if (args.length !=3) 
+		System.out.println("bookmark 0.5");
+		if (args.length ==3) 
 		{
+			System.out.println("bookmark 1");
 			try {
+				System.out.println("bookmark 1.5");
 			    ChatRoomClient crc = new ChatRoomClient(args[0], args[1], args[2]); // "new" calls the ObjectLoader
+			    System.out.println("bookmark 2");
 			    // crc.receive(); // branch the main thread into the program object's receive() method to
 			    }                 // receive & display chat messages received from the server (other clients).
 			catch(Exception e)
