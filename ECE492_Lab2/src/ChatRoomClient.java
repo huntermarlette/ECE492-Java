@@ -55,7 +55,15 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		
 		if (args.length !=3) 
 		{
-			ChatRoomClient crc = new ChatRoomClient(args[0], args[1], args[3]);	// call the constructor method
+			try {
+			    ChatRoomClient crc = new ChatRoomClient(args[0], args[1], args[2]); // "new" calls the ObjectLoader
+			    // crc.receive(); // branch the main thread into the program object's receive() method to
+			    }                 // receive & display chat messages received from the server (other clients).
+			catch(Exception e)
+			    {   
+			    System.out.println(e); // print the exception object as the error message
+			    return; // can't continue if can't load the program!
+			    }       // (OR we have encountered an Exception in the receive() method during the receive() process.)
 		}
 		
 	} // end of main
