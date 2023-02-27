@@ -23,9 +23,29 @@ public class ChatRoomClient extends JFrame implements ActionListener
 	int maxFontSize = 50;
 	int minFontSize = 5;
 	
-	//private JTextArea chatBox;
-    //private JTextField messageField;
-    //private JButton sendButton;
+	// GUI Objects
+	JFrame      chatWindow          = new JFrame(); // like int x = 5; to provide an inital value to the pointer field
+	JPanel      topPanel            = new JPanel();
+	JPanel      middlePanel         = new JPanel();
+	JPanel      bottomPanel         = new JPanel();
+	JLabel      sendMsgLabel        = new JLabel("Enter a message here and push SEND below.");
+	JLabel      whosInLabel         = new JLabel("Who's in the chat room:");
+	JLabel      receivedMsgsLabel   = new JLabel("Received messages (including our sends)");
+	JButton     sendPublicButton    = new JButton("Send To Everyone In");
+	JButton     availableButton     = new JButton();
+	JTextField  errMsgTextField     = new JTextField("Error messages will show here.");
+	JTextArea   sendChatArea        = new JTextArea();
+	JList<String> whosInList        = new JList<String>(); // note JList is declared to hold String objects (chat names)
+	JTextArea   receiveChatArea     = new JTextArea();
+	JScrollPane sendScrollPane      = new JScrollPane(sendChatArea);
+	JScrollPane whosInScrollPane    = new JScrollPane(whosInList); 
+	JScrollPane receiveScrollPane   = new JScrollPane(receiveChatArea); 
+	 
+	//Window Menu items
+	MenuBar  menuBar             = new MenuBar();
+	Menu     fontMenu            = new Menu("Font");
+	MenuItem biggerFontMenuItem  = new MenuItem("Bigger");
+	MenuItem smallerFontMenuItem = new MenuItem("Smaller");
     
     
 	public ChatRoomClient(String serverAddress, String clientName, String password) throws Exception // My constructor method
@@ -35,12 +55,9 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		    throw new IllegalArgumentException("Parameters may not contain blanks."); // also returns.
 		}
 		System.out.println("bookmark 3");
-		//String serverAddress = "localhost";		
-		// this may be an error in using "serverAddress" and "hostAddres" as the same variable but I will keep this temporarily 
 		
 		System.out.println("Connecting to the chat room server at " + serverAddress + " on port 2222.");
 		s = new Socket(serverAddress, 2222); // connect (server net address is specified by user but server port # is assumed)
-		//System.out.println("bookmark 4");
 		
 		System.out.println("Connected to the chat server!");
 		
@@ -50,9 +67,11 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		String reply = (String) ois.readObject();          // wait for server response (note cast of receive type from Object to String)
 		
 		if (reply.startsWith("Welcome")) 
+		{
 			   System.out.println("Join was successful!");
-			 else 
+		} else { 
 			   throw new IllegalArgumentException("Join of " + clientName + " with password " + password + " was not successful."); // also returns
+		}
 			 
 			 
 	} // end of constructor
