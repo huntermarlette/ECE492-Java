@@ -72,8 +72,60 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		} else { 
 			   throw new IllegalArgumentException("Join of " + clientName + " with password " + password + " was not successful."); // also returns
 		}
-			 
-			 
+		
+		//COMPOSE the GUI window (Add the GUI objects to the window in memory)
+		topPanel.setLayout(new GridLayout(1,3)); // a format with 1 row and 3 columns
+	    topPanel.add(sendMsgLabel);              // goes in row 1 column 1
+	    topPanel.add(whosInLabel);               // goes in row 1 column 2
+	    topPanel.add(receivedMsgsLabel);         // goes in row 1 column 3
+	    chatWindow.getContentPane().add(topPanel,"North");
+
+	    middlePanel.setLayout(new GridLayout(1,3)); 
+	    middlePanel.add(sendScrollPane);
+	    middlePanel.add(whosInScrollPane);
+	    middlePanel.add(receiveScrollPane);
+	    chatWindow.getContentPane().add(middlePanel,"Center");
+
+	    bottomPanel.setLayout(new GridLayout(1,3)); 
+	    bottomPanel.add(sendPublicButton);
+	    bottomPanel.add(availableButton); // anticipate some future function
+	    bottomPanel.add(errMsgTextField);
+	    chatWindow.getContentPane().add(bottomPanel,"South");
+	    
+	    
+	    chatWindow.setTitle(clientName + "'s CHAT ROOM    (Close this window to leave the chat room.)");
+	    
+	    sendPublicButton.setBackground(Color.green);
+	    whosInLabel.setForeground(Color.blue);
+	    
+	    receiveChatArea.setLineWrap(true);     // cause long text added to be properly
+	    receiveChatArea.setWrapStyleWord(true);// "wrapped" to the next line.
+	    sendChatArea.setLineWrap(true);
+	    sendChatArea.setWrapStyleWord(true);
+	    
+	    receiveChatArea.setEditable(false); // keep user from changing the output area!
+	    errMsgTextField.setEditable(false); // keep user from changing the error message area!
+	    
+	    System.out.println("bookmark 4");
+	    
+	    sendPublicButton.addActionListener(this); // sendPublicButton can now call us when the user pushes it!                                      
+        // "this" is our program's address in memory (different every run)
+	    
+	    UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel"); //Add this line to help Mac GUIs look better:
+	    // Alternative Method:
+//	    chatWindow.setMenuBar(menuBar);
+//	    menuBar.add(fontMenu);
+//	    fontMenu.add(biggerFontMenuItem);
+//	    fontMenu.add(smallerFontMenuItem);
+//	    biggerFontMenuItem.addActionListener(this); // so these FontMenuItems (buttons!) 
+//	    smallerFontMenuItem.addActionListener(this);// in the font menu can call us!
+	    
+	    chatWindow.setSize(800,500);    // width,height
+	    chatWindow.setLocation(400,0);  // x,y (x is "to the right of the left margin", y is "down-from-the-top")
+	    chatWindow.setVisible(true);    // show it
+	    chatWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // terminate if user closes window
+	    
+	    
 	} // end of constructor
 
 	
