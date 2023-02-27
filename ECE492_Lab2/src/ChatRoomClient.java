@@ -28,9 +28,12 @@ public class ChatRoomClient extends JFrame implements ActionListener
     private JButton sendButton;
     
     
-	public ChatRoomClient(String hostAddress, String clientName, String password) // My constructor method
+	public ChatRoomClient(String hostAddress, String clientName, String password) throws Exception // My constructor method
 	{
-		
+		if (hostAddress.contains(" ") || clientName.contains(" ") || password.contains(" "))
+		{
+		    throw new IllegalArgumentException("Parameters may not contain blanks."); // also returns.
+		}
 		
 	} // end of constructor
 
@@ -42,7 +45,7 @@ public class ChatRoomClient extends JFrame implements ActionListener
 	} // end of Actions Performed
 	
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) throws Exception 
 	{
 		// I could shorten these if statements into single line commands
 		if (args.length !=3) 
