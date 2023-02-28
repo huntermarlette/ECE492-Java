@@ -15,13 +15,13 @@ import java.net.Socket;
 public class ChatRoomClient extends JFrame implements ActionListener 
 {
 	// INSTANCE variables (allocated in the "program object" in Dynamic storage)
-	Socket s;
-	ObjectOutputStream oos;
-	ObjectInputStream ois;
-	String newLine = System.lineSeparator();
-	int fontSize = 20;
-	int maxFontSize = 50;
-	int minFontSize = 5;
+	Socket 					s;
+	ObjectOutputStream 		oos;
+	ObjectInputStream 		ois;
+	String newLine 			= System.lineSeparator();
+	int fontSize 			= 20;
+	int maxFontSize 		= 50;
+	int minFontSize 		= 5;
 	
 	// GUI Objects
 	JFrame      chatWindow          = new JFrame(); // like int x = 5; to provide an inital value to the pointer field
@@ -54,7 +54,7 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		{
 		    throw new IllegalArgumentException("Parameters may not contain blanks."); // also returns.
 		}
-		System.out.println("bookmark 5");
+		//System.out.println("bookmark 5");
 		
 		System.out.println("Connecting to the chat room server at " + serverAddress + " on port 2222.");
 		s = new Socket(serverAddress, 2222); // connect (server net address is specified by user but server port # is assumed)
@@ -72,7 +72,6 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		} else { 
 			   throw new IllegalArgumentException("Join of " + clientName + " with password " + password + " was not successful."); // also returns
 		}
-		
 		
 		//COMPOSE the GUI window (Add the GUI objects to the window in memory)
 		topPanel.setLayout(new GridLayout(1,3)); // a format with 1 row and 3 columns
@@ -93,7 +92,6 @@ public class ChatRoomClient extends JFrame implements ActionListener
 	    bottomPanel.add(errMsgTextField);
 	    chatWindow.getContentPane().add(bottomPanel,"South");
 	    
-	    
 	    chatWindow.setTitle(clientName + "'s CHAT ROOM    (Close this window to leave the chat room.)");
 	    
 	    sendPublicButton.setBackground(Color.green);
@@ -107,7 +105,7 @@ public class ChatRoomClient extends JFrame implements ActionListener
 	    receiveChatArea.setEditable(false); // keep user from changing the output area!
 	    errMsgTextField.setEditable(false); // keep user from changing the error message area!
 	    
-	    System.out.println("bookmark 6");
+	    //System.out.println("bookmark 6");
 	    
 	    sendPublicButton.addActionListener(this); // sendPublicButton can now call us when the user pushes it!                                      
         // "this" is our program's address in memory (different every run)
@@ -129,6 +127,43 @@ public class ChatRoomClient extends JFrame implements ActionListener
 	    System.out.println("bookmark 7");
 	} // end of constructor
 
+	// adding a new method for receive() method:
+	public void receive() 
+	{
+		try {
+			while(true) // capture entering main thread in a do-forever read loop
+		    {
+				Object incomingMessage = ois.readObject(); // WAIT for a message from the server
+				
+				if (incomingMessage instanceof String)
+				{
+				String receivedChatMessage = (String) incomingMessage; // Copy and CAST pointer 
+				// The received object is now also pointed to by the pointer receivedChatMessage which is type String 
+				// Pass the String pointer to methods that expect to receive a String as a parameter, or
+				// call String methods on the received object using the String pointer.
+				receiveChatArea.append(newLine + receivedChatMessage);  // show text on GUI 
+				// auto-scroll the JScrollPane to bottom line so the last message will be visible.
+				receiveChatArea.setCaretPosition(receiveChatArea.getDocument().getLength()); // scroll to bottom
+				}
+		    }
+			}
+		catch(Exception e) 
+			{
+			// show error message to user
+		    errMsgTextField.setBackground(Color.pink); // this will get their attention!
+		    errMsgTextField.setText("CHAT ROOM SERVER CONNECTION HAS FAILED!");
+		    receiveChatArea.append(newLine + "You must close this chatWindow and then restart the client to reconnect to the server to continue.");
+		    receiveChatArea.setCaretPosition(receiveChatArea.getDocument().getLength()); // scroll down
+		    // disable the GUI function
+		    sendChatArea.setEditable(false); // keep user from trying to send any more messages.
+		    sendPublicButton.setEnabled(false);    // stop button pushing
+			
+			}
+		// receive thread, now out of the loop, will return to the main() method and be terminated.
+	}
+	
+	
+	
 	
 	//@Override
 	public void actionPerformed(ActionEvent ae)	// buttons etc will call here
@@ -145,11 +180,9 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		      errMsgTextField.setBackground(Color.pink); // highlight to get attention
 		      return; // return button's thread to the button.
 		      }
-		   //System.out.println("Your message '" + chatMessageToSend + "' is being sent to the server.");
+		   System.out.println("Your message '" + chatMessageToSend + "' is being sent to the server.");
 		   //sendChatArea.setText(""); // clear the input field.(indication to user that the message was sent.)
-		   
-		   // Send() Function?
-		   try {
+		   try {	// Send() Function?
 			   oos.writeObject(chatMessageToSend);
 			   sendChatArea.setText(""); // clear input area
 			   }
@@ -163,7 +196,6 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		   return; // return the button's thread to the JButton program
 		   } // end of processing block for the send button
 
-		
 		
 		
 		if (ae.getSource() == biggerFontMenuItem)
@@ -186,8 +218,10 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		   return;   
 		   }
 		
-		
 	} // end of Actions Performed
+	
+	
+	
 	
 	
 	public static void main(String[] args) throws Exception 
@@ -205,8 +239,8 @@ public class ChatRoomClient extends JFrame implements ActionListener
 			try {
 				System.out.println("bookmark 4");
 			    ChatRoomClient crc = new ChatRoomClient(args[0], args[1], args[2]); // "new" calls the ObjectLoader
+			    crc.receive(); // branch the main thread into the program object's receive() method to
 			    System.out.println("bookmark 0000");
-			    // crc.receive(); // branch the main thread into the program object's receive() method to
 			    }                 // receive & display chat messages received from the server (other clients).
 			catch(Exception e)
 			    {   
