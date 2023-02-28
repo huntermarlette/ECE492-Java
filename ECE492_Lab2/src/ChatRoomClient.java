@@ -135,16 +135,39 @@ public class ChatRoomClient extends JFrame implements ActionListener
 		    {
 				Object incomingMessage = ois.readObject(); // WAIT for a message from the server
 				
+				// if you get a string type
 				if (incomingMessage instanceof String)
 				{
-				String receivedChatMessage = (String) incomingMessage; // Copy and CAST pointer 
-				// The received object is now also pointed to by the pointer receivedChatMessage which is type String 
-				// Pass the String pointer to methods that expect to receive a String as a parameter, or
-				// call String methods on the received object using the String pointer.
-				receiveChatArea.append(newLine + receivedChatMessage);  // show text on GUI 
-				// auto-scroll the JScrollPane to bottom line so the last message will be visible.
-				receiveChatArea.setCaretPosition(receiveChatArea.getDocument().getLength()); // scroll to bottom
+					String receivedChatMessage = (String) incomingMessage; // Copy and CAST pointer 
+					// The received object is now also pointed to by the pointer receivedChatMessage which is type String 
+					// Pass the String pointer to methods that expect to receive a String as a parameter, or
+					// call String methods on the received object using the String pointer.
+					receiveChatArea.append(newLine + receivedChatMessage);  // show text on GUI 
+					// auto-scroll the JScrollPane to bottom line so the last message will be visible.
+					receiveChatArea.setCaretPosition(receiveChatArea.getDocument().getLength()); // scroll to bottom
 				}
+				
+				// if you get an array of strings:
+				if (incomingMessage instanceof String)
+		        {
+					String receivedChatMessage = (String) incomingMessage; // Copy and CAST pointer 
+					//...
+		        }
+				else if (incomingMessage instanceof String[]) // an array of Strings 
+		        {
+					String[] listOfWhosIn = (String[]) incomingMessage; // Copy and CAST pointer 
+					whosInList.setListData(listOfWhosIn); // give JList the array of Strings to display on GUI.
+		        }
+				else if (incomingMessage instanceof ImageIcon) // a picture! 
+		        {
+					ImageIcon receivedPicture = (ImageIcon) incomingMessage; // Copy and CAST pointer 
+					System.out.println("A picture was received from the server. " + receivedPicture);
+					System.out.println("Pictures are not processed by the lab 2 ChatRoomClient.");
+		        }
+				else    // Ignore unexpected object type:    
+		        {
+					System.out.println("Unexpected object type received from server: " + incomingMessage); // unrecognized object will print itself. 
+		        }
 		    }
 			}
 		catch(Exception e) 
