@@ -60,9 +60,11 @@ public class Lecture3_MyFirstGUI implements ActionListener
 		window.setLocation(500,0); // x,y (x is "to the right of the left margin, y is "down-from-the-top")
 		
 		button.setBackground(Color.red);										// ** PROBLEM LINE **
+		button.setForeground(Color.BLACK);										// this works! Why doesn't the background color work?!?
+		
 		button.setBorderPainted(false);
 		button.setOpaque(true);													// apparently these two additional lines are necessary for it to run properly on mac only
-		button.setForeground(Color.BLACK);										// this works! Why doesn't the background color work?!?
+		
 		//btn[i].setBackground(Color.RGBtoHSB(int, int, int, float[]));			// more complex method of assigning colors with RGB values
 		
 	  	textField.setBackground(Color.yellow);
