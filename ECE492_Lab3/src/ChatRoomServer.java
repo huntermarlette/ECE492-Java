@@ -30,7 +30,7 @@ public class ChatRoomServer implements Runnable
 	        FileInputStream   fis = new FileInputStream("passwords.ser");
 	        ObjectInputStream ois = new ObjectInputStream(fis);
 	        passwords = (ConcurrentHashMap<String,String>) ois.readObject();//cast type of object found
-	        ois.close();                                                          //from Object to collection type
+	        ois.close();                                                    //from Object to collection type
 	        System.out.println("Previously in the chat room: "); 			// Printing everyone's chat name and password
 	        System.out.println(passwords);                       			// on the console can be very handy in testing.
 	        }
@@ -165,25 +165,38 @@ public class ChatRoomServer implements Runnable
 		// If not, we have dumped this caller. Either way we are waiting again (with a new thread) in accept() 
 		// in the ServerSocket for the next client to connect. (Note we only call the accept() method with
 		// one thread at a time...
-	
+		try {
+			while (true) // client thread loops forever here
+		    {  
+				Object message = ois.readObject(); 							// wait for this client to send something. 
+				System.out.println("Received '" + message + "' from " + chatName); // write debug trace to server console
+				sendToAllClients(chatName + " says: " + message);
+		    }
+		} 
+		catch(Exception e) 													// connection from client failed, probably because they left the chat room!
+		{
+			// LEAVE PROCESSING goes here
+		}
+		
+		
 		System.out.println("end of runnable \n");
 	} // end of runnable
 	
 	
 	
-	private synchronized void sendToAllClients(Object message) // "synchronized" restricts client
-	{                                                        //  threads to enter one-at-a-time
+	private synchronized void sendToAllClients(Object message) 				// "synchronized" restricts client
+	{                                                        				//  threads to enter one-at-a-time
 		ObjectOutputStream[] oosArray = whosIn.values().toArray(new ObjectOutputStream[0]);
 		for (ObjectOutputStream clientOOS : oosArray)
 	    {
 			try {clientOOS.writeObject(message);}
-			catch (IOException e) {} // do nothing if send error because it's probably
+			catch (IOException e) {} 										// do nothing if send error because it's probably
 	    }
 	} // end of sendToAllClients()
 	
 	
 	
-	private synchronized void savePasswords() 	// writing the passwords collection from memory to disk
+	private synchronized void savePasswords() 								// writing the passwords collection from memory to disk
 	{ 
 		System.out.println("Entered savePasswords()");
 		try {
