@@ -67,4 +67,19 @@ public class ChatRoomServer implements Runnable
 		
 	} // end of runnable
 	
+	
+	private synchronized void savePasswords() 	// writing the passwords collection from memory to disk
+	{ 
+	try {
+		FileOutputStream   fos = new FileOutputStream("passwords.ser");
+	    ObjectOutputStream oos = new ObjectOutputStream(fos);
+	    oos.writeObject(passwords);
+	    oos.close();
+	    }
+	catch(Exception e)
+	    {
+	    System.out.println("passwords collection cannot be saved on disk: " + e);
+	    }
+	}
+	
 } // end of class
