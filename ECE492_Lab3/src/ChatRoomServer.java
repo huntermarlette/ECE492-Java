@@ -43,11 +43,7 @@ public class ChatRoomServer implements Runnable
 		
 	} // end of constructor method
 	
-	
-//	public void actionPerformed(ActionEvent ae) 
-//	{
-//		
-//	} // end of actionsPerformed
+
 	
 	
 	public static void main(String[] args) throws Exception 
@@ -62,11 +58,13 @@ public class ChatRoomServer implements Runnable
 	} //end of main
 	
 	
+	
+	
 	public void run() 														// client threads enter here
 	{
 		String newline = System.getProperty("line.separator");
 		//System.out.println("\nEntered run()");
-		System.out.println(newline);
+		//System.out.println(newline);
 		
 		// declare local variables:
 		Socket             s                = null;
@@ -83,8 +81,8 @@ public class ChatRoomServer implements Runnable
 		try {
 		    s = ss.accept(); 												// wait for next client to connect
 		    clientAddress = s.getInetAddress().getHostAddress();
-		    //System.out.println("New client connecting from " + clientAddress);
-		    System.out.println(chatName + " connecting from " + clientAddress);
+		    System.out.println(newline + "New client connecting from " + clientAddress);
+		    //System.out.println(chatName + " connecting from " + clientAddress);
 		    ois = new ObjectInputStream(s.getInputStream());   				// Don't make ois and oos in ADJACENT statements.
 		    joinMessage = ((String) ois.readObject()).trim();  				// Must cast 1st message read from type Object to String.
 		    oos = new ObjectOutputStream(s.getOutputStream()); 				// trim() drops leading/trailing (but not imbeded) blanks.
@@ -142,7 +140,7 @@ public class ChatRoomServer implements Runnable
 			sendToAllClients(whosInArray);									// Now, as a debug trace message, show on the server console the clients that are "in the chat room".
 																			// Note we sent a who's-in ARRAY over the network to all the clients, and this little snippet of code
 																			// is simply adding them to a single String so we can print it on the server console.
-			System.out.println("Sending 'Welcome to TERMINALBUBBA who just joined (or rejoined) the chat room!' to all clients.");
+			System.out.println("Sending 'Welcome to" + chatName + " who just joined (or rejoined) the chat room!' to all clients.");
 			
 			String whosInString = "";
 			for (String name : whosInArray)
@@ -176,7 +174,7 @@ public class ChatRoomServer implements Runnable
 			while (true) // client thread loops forever here
 		    {  
 				Object message = ois.readObject(); 							// wait for this client to send something. 
-				System.out.println("Received '" + message + "' from " + chatName); // write debug trace to server console
+				System.out.println(newline + "Received '" + message + "' from " + chatName); // write debug trace to server console
 				sendToAllClients(chatName + " says: " + message);
 				System.out.println("Sending '" + chatName + " says: " + message + "' to all clients.");
 		    }
@@ -184,7 +182,7 @@ public class ChatRoomServer implements Runnable
 		catch(Exception e) 													// connection from client failed, probably because they left the chat room!
 		{
 // LEAVE Processing 
-			System.out.println("IN LEAVE PROCESSING");
+			System.out.println(newline + "IN LEAVE PROCESSING");
 			
 			ObjectOutputStream currentOOS = whosIn.get(chatName); // retrieve pointer to the object "associated with" chatName key (an OOS)
 			System.out.println("old OOS: " + oos);
@@ -206,12 +204,10 @@ public class ChatRoomServer implements Runnable
 				sendToAllClients("Currently in the chat room: " + whosInString);
 				System.out.println("Currently in the chat room: " + whosInString);
 				}
-
 		}
 		
-		
-		//System.out.println("end of runnable \n");
 	} // end of runnable
+	
 	
 	
 	
@@ -224,6 +220,7 @@ public class ChatRoomServer implements Runnable
 			catch (IOException e) {} 										// do nothing if send error because it's probably
 	    }
 	} // end of sendToAllClients()
+	
 	
 	
 	
