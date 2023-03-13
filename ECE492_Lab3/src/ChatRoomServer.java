@@ -3,10 +3,10 @@
 // Hunter Marlette
 // Student ID # 200289830
 
-// Note:
+// Note: I have included all of the command line print statements shown in the solution class we used for Lab 2.
+//		 I do not feel that many of them are necesssary but I would rather include too much information than not enough for the purpose of grading.
+//		 If you would like to see how my code would actually look in the output terminal without the unnecessary fluff, comment out lines 139, 175, 181, 184, 185, 192, and 226
 
-
-import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ public class ChatRoomServer implements Runnable
 	ConcurrentHashMap<String,ObjectOutputStream> whosIn = new ConcurrentHashMap<String,ObjectOutputStream>();
 	ConcurrentHashMap<String,String> passwords = new ConcurrentHashMap<String,String>();
 	private ServerSocket ss; // but don't try to initialize ss for port 2222 here!
-	
+	String newline = System.getProperty("line.separator");					// declaring a line feed statement for organizing the terminal output easier
 	
 	public ChatRoomServer() throws Exception  	// My constructor method
 	{ 		
@@ -38,9 +38,10 @@ public class ChatRoomServer implements Runnable
 	        {
 	    	System.out.println("passwords.ser is not found, so an empty collection will be used.");
 	        }
-		//System.out.println("\n");
+//		System.out.println(newline + "Note: I have included all of the command line print statements shown in the solution class we used for Lab 2." + newline + 
+//				"I do not feel that many of them are necesssary but I would rather include too much information than not enough for the purpose of grading." + 
+//				"If you would like to see how my code would actually look in the output terminal without the unnecessary fluff, comment out lines 139, 175, 181, 184, 185, 192, and 226");
 		new Thread(this).start(); // this just-created thread branches into our run() method, but the thread that called this "new" statement continues on!
-		
 	} // end of constructor method
 	
 
@@ -49,11 +50,8 @@ public class ChatRoomServer implements Runnable
 	public static void main(String[] args) throws Exception 
 	{
 		System.out.println("Welcome to Lab 3 - ChatRoomServer by Hunter Marlette");
-		
 		if (args.length != 0)												// if any arguments are passed in, print that they will be ignored
-		{
 			System.out.println("Command line parameters are ignored by ChatRoomServer.");
-		}
 		new ChatRoomServer();
 	} //end of main
 	
@@ -62,10 +60,8 @@ public class ChatRoomServer implements Runnable
 	
 	public void run() 														// client threads enter here
 	{
-		String newline = System.getProperty("line.separator");
-		//System.out.println("\nEntered run()");
-		//System.out.println(newline);
-		
+		//String newline = System.getProperty("line.separator");				// declaring a line feed statement for organizing the terminal output easier
+
 		// declare local variables:
 		Socket             s                = null;
 		ObjectInputStream  ois              = null;
@@ -140,7 +136,7 @@ public class ChatRoomServer implements Runnable
 			sendToAllClients(whosInArray);									// Now, as a debug trace message, show on the server console the clients that are "in the chat room".
 																			// Note we sent a who's-in ARRAY over the network to all the clients, and this little snippet of code
 																			// is simply adding them to a single String so we can print it on the server console.
-			System.out.println("Sending 'Welcome to" + chatName + " who just joined (or rejoined) the chat room!' to all clients.");
+			System.out.println("Sending 'Welcome to " + chatName + " who just joined (or rejoined) the chat room!' to all clients.");
 			
 			String whosInString = "";
 			for (String name : whosInArray)
