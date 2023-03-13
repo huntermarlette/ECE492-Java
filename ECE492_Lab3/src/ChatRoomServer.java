@@ -165,6 +165,8 @@ public class ChatRoomServer implements Runnable
 		// If not, we have dumped this caller. Either way we are waiting again (with a new thread) in accept() 
 		// in the ServerSocket for the next client to connect. (Note we only call the accept() method with
 		// one thread at a time...
+		
+// receive/send Processing
 		try {
 			while (true) // client thread loops forever here
 		    {  
@@ -175,7 +177,25 @@ public class ChatRoomServer implements Runnable
 		} 
 		catch(Exception e) 													// connection from client failed, probably because they left the chat room!
 		{
-			// LEAVE PROCESSING goes here
+// LEAVE Processing 
+			System.out.println("   Entering Leave Processing");
+			ObjectOutputStream currentOOS = whosIn.get(chatName); // retrieve pointer to the object "associated with" chatName key (an OOS)
+			if (currentOOS == oos) // whosIn OOS is the same as this thread's oos. So this is a CURRENT SESSION thread leaving. 
+			   {                   // So do normal leave processing    
+			   whosIn.remove(chatName);
+			   sendToAllClients("Goodbye to " + chatName + " who just left the chat room.");
+			   //System.out.println("Goodbye to " + chatName + " who just left the chat room.");
+			   
+			   //sending an updated list of who is in the chatroom using the same method as when joining the server
+			   String[] whosInArray = whosIn.keySet().toArray(new String[0]);
+			   Arrays.sort(whosInArray);
+			   String whosInString = "";
+			   for (String name : whosInArray)
+				   whosInString += name + ", ";
+			   //System.out.println("Currently in the chat room: " + whosInString);
+			   sendToAllClients("Currently in the chat room: " + whosInString);
+			   }
+
 		}
 		
 		
