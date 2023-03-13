@@ -19,19 +19,35 @@ public class ChatRoomServer implements Runnable
 	ConcurrentHashMap<String,String> passwords = new ConcurrentHashMap<String,String>();
 	private ServerSocket ss; // but don't try to initialize ss for port 2222 here!
 	
+	
 	public ChatRoomServer() throws Exception  	// My constructor method
 	{ // There is no GUI in this program so the constructor is much more simple
 		
 		ss = new ServerSocket(2222); // will throw an Exception if port 2222 is not available
 		System.out.println("ChatRoomServer is up at " + InetAddress.getLocalHost().getHostAddress() + " on port " + ss.getLocalPort());
 		
+		try {	// loads the passwords collection
+	        FileInputStream   fis = new FileInputStream("passwords.ser");
+	        ObjectInputStream ois = new ObjectInputStream(fis);
+	        passwords = (ConcurrentHashMap<String,String>) ois.readObject();//cast type of object found
+	        ois.close();                                                          //from Object to collection type
+	        System.out.println("Previously in the chat room: "); // Printing everyone's chat name and password
+	        System.out.println(passwords);                       // on the console can be very handy in testing.
+	        }
+	   catch(FileNotFoundException fnfe)
+	        {
+	    	System.out.println("passwords.ser is not found, so an empty collection will be used.");
+	        }
+		
 	} // end of constructor method
+	
 	
 	public void actionPerformed(ActionEvent ae) 
 	{
 		
 		
 	} // end of actionsPerformed
+	
 	
 	public static void main(String[] args) throws Exception 
 	{
