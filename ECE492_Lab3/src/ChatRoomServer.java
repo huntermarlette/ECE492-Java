@@ -126,8 +126,8 @@ public class ChatRoomServer implements Runnable
 		// Verify entered Password:
 		if (passwords.containsKey(chatName)) // is this chatName a KEY in the passwords collection? (have they previously joined?)
 				   {
-				   String storedPassword = passwords.get(chatName);  	// if YES, retrive the stored pw for this chatName
-				   if (enteredPassword.equals(storedPassword))     		// case-sensitive compare to pw just entered by user 
+				   storedPassword = passwords.get(chatName);  			// if YES, retrive the stored pw for this chatName
+				   if (providedPassword.equals(storedPassword))     		// case-sensitive compare to pw just entered by user 
 				/*PASS*/{ //If this person's ALREADY IN the whosIn collection, then they are "rejoining" from another address!     	   
 				        if (whosIn.containsKey(chatName))				// Is this chatName is already in the chat room?        
 				/*TESTFOR*/{ // Already in! But we will accept a (re)join from a NEW location.
@@ -140,15 +140,15 @@ public class ChatRoomServer implements Runnable
 				        }  
 				     else // a password was retrieved from the passwords collection, but entered pw is not = to it.
 				/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
-				/* PW */oos.writeObject("Your entered password " + enteredPassword + " is not the same as the password stored for chat name " + chatName);
+				/* PW */oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
 				        oos.close(); // hang up.
-				        System.out.println("Invalid password: " + enteredPassword + " instead of " + storedPassword + " for " + chatName);
+				        System.out.println("Invalid password: " + providedPassword + " instead of " + storedPassword + " for " + chatName);
 				        return;      // and kill this client thread
 				        } 
 				   } // end of processing for the case: pw was found in the passwords collection
 				else // If chatName is NOT IN the passwords collection then this chatName has NEVER joined before. (TOP if above)
 				   { // So we will be happy to join them now, and ACCEPT (vs. test) their provided password.
-				   passwords.put(chatName, enteredPassword);               /*NEVER */
+				   passwords.put(chatName, providedPassword);               /*NEVER */
 				   savePasswords(); // save updated passwords list on disk./*JOINED*/
 				   System.out.println(chatName + " is a new client in the chat room.");
 				   }
