@@ -97,63 +97,49 @@ public class ChatRoomServer implements Runnable
 			System.out.println("   Continuing to JOIN Processing");
 			int blankOffset = joinMessage.indexOf(" ");          // scan joinMessage for an imbedded blank
 			if (blankOffset < 0)                                 // negative offset return means no blank found.
-				{
+			{
 				try {
 					System.out.println("No blank in join message: " + joinMessage);
 					oos.writeObject("Invalid format in 1st message."); // not specific in case of hacker caller
 					oos.close(); // kill connection
 			    } catch(Exception e) {}
 				return;      // kill client session thread
-				} 
+			} 
 			chatName = joinMessage.substring(0,blankOffset).toUpperCase(); // 2 parm substring() form is from-to (non-inclusive)
 			providedPassword = joinMessage.substring(blankOffset).trim();  // 1 parm substring() means here-to-end. trim() removes leading blank(s)
-			
 			System.out.println("   Checkpoint 2");
-			
 			
 			// Verify entered Password:
 			System.out.println("   Verifying entered password");
 	// this section had a lot of errors in from the lab instructions so it will probably be the source of issues when it comes time to test
 			if (passwords.containsKey(chatName)) // is this chatName a KEY in the passwords collection? (have they previously joined?)
-				{
+			{
 				System.out.println("Password is correct");
 				storedPassword = passwords.get(chatName);  			// if YES, retrive the stored pw for this chatName
 				if (providedPassword.equals(storedPassword))     		// case-sensitive compare to pw just entered by user 
-		   /*PASS*/ { //If this person's ALREADY IN the whosIn collection, then they are "rejoining" from another address!     	   
+	   /*PASS*/ { //If this person's ALREADY IN the whosIn collection, then they are "rejoining" from another address!     	   
 					if (whosIn.containsKey(chatName))				// Is this chatName is already in the chat room?        
-			/*TESTFOR*/ { // Already in! But we will accept a (re)join from a NEW location.
+		/*TESTFOR*/ { // Already in! But we will accept a (re)join from a NEW location.
 			 /*REJOIN*/ previousOOS = whosIn.get(chatName); 			// get previous oos before we replace it.
 				 		whosIn.replace(chatName, oos);      			// replace old oos with rejoin oos
-					    try {
-					    	previousOOS.writeObject("Session terminated due to rejoin from another location.");
-					        previousOOS.close(); 						// shut down previous connection. (this prompts leave processing)
-					    } catch (IOException e) {
-					        // TODO Auto-generated catch block
-					        e.printStackTrace();
-					    }
+					    previousOOS.writeObject("Session terminated due to rejoin from another location.");
+					    previousOOS.close(); 						// shut down previous connection. (this prompts leave processing)
 					    System.out.println(chatName + " is rejoining.");
-					    }                         
-					}
-					else // a password was retrieved from the passwords collection, but entered pw is not = to it.
-			/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
-			/* PW */try {
-						oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
-						oos.close(); // hang up.
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					}                         
+				} else // a password was retrieved from the passwords collection, but entered pw is not = to it.
+		/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
+		/* PW */	oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
+					oos.close(); // hang up.
 					System.out.println("Invalid password: " + providedPassword + " instead of " + storedPassword + " for " + chatName);
 					return;      // and kill this client thread
-					} 
-				} // end of processing for the case: pw was found in the passwords collection
-				else // If chatName is NOT IN the passwords collection then this chatName has NEVER joined before. (TOP if above)
-					{ // So we will be happy to join them now, and ACCEPT (vs. test) their provided password.
-					passwords.put(chatName, providedPassword);               /*NEVER */
-					savePasswords(); // save updated passwords list on disk./*JOINED*/
-					System.out.println(chatName + " is a new client in the chat room.");
-					}
-			
+				} 
+			} // end of processing for the case: pw was found in the passwords collection
+			else // If chatName is NOT IN the passwords collection then this chatName has NEVER joined before. (TOP if above)
+			{ // So we will be happy to join them now, and ACCEPT (vs. test) their provided password.
+				passwords.put(chatName, providedPassword);               /*NEVER */
+				savePasswords(); // save updated passwords list on disk./*JOINED*/
+				System.out.println(chatName + " is a new client in the chat room.");
+			}
 			System.out.println("   Checkpoint 3");
 			
 			// JOIN Processing: 
@@ -171,20 +157,35 @@ public class ChatRoomServer implements Runnable
 			
 			System.out.println("   Checkpoint 4");
 			
+			String[] whosInArray = whosIn.keySet().toArray(new String[0]);
+			Arrays.sort(whosInArray); // note the sort() method is not in the array object, it is in a separate Arrays class.
+			
+			sendToAllClients("Welcome to " + chatName + " who has just joined (or rejoined) the chat room!");    
+			sendToAllClients(whosInArray);
+
+			// Now, as a debug trace message, show on the server console the clients that are "in the chat room".
+			// Note we sent a who's-in ARRAY over the network to all the clients, and this little snippet of code
+			// is simply adding them to a single String so we can print it on the server console.
+
+			String whosInString = "";
+			//for (String name : whosInArrayinstance variable)
+			for (String name : whosInArray)
+			     whosInString += name + ", ";
+			System.out.println("Currently in the chat room: " + whosInString);
 			
 			
-			
-		    }
+		} // bottom of try for join processing
 		catch(Exception e) // connecting client may not be using oos, or firstMessage was not a String
-		    {
+		{
+			System.out.println("Connection failure during join processing from " + chatName + " at " + clientAddress + " " + e);
 		    System.out.println("Client " + clientAddress + " join protocol not OOS or 1st message not String. " + e );
 		    if (s.isConnected())
-		       {
+		    {
 		       try {s.close();}         // hang up
 		       catch(IOException ioe){} // already hung up!
-		       }
-		    return; // return to the Thread object to terminate this client thread. 
 		    }
+		    return; // return to the Thread object to terminate this client thread. 
+		}
 		finally // create a next-client thread whether catch was entered or not. 
 		    {
 		    new Thread(this).start(); // wait for next client to connect
@@ -194,100 +195,23 @@ public class ChatRoomServer implements Runnable
 		// in the ServerSocket for the next client to connect. (Note we only call the accept() method with
 		// one thread at a time...
 		
-		
-//		// continuing to the JOIN Processing:
-//		System.out.println("   Continuing to JOIN Processing");
-//		int blankOffset = joinMessage.indexOf(" ");          // scan joinMessage for an imbedded blank
-//		if (blankOffset < 0)                                 // negative offset return means no blank found.
-//			{
-//			try {
-//				System.out.println("No blank in join message: " + joinMessage);
-//				oos.writeObject("Invalid format in 1st message."); // not specific in case of hacker caller
-//				oos.close(); // kill connection
-//		    } catch(Exception e) {}
-//			return;      // kill client session thread
-//			} 
-//		chatName = joinMessage.substring(0,blankOffset).toUpperCase(); // 2 parm substring() form is from-to (non-inclusive)
-//		providedPassword = joinMessage.substring(blankOffset).trim();  // 1 parm substring() means here-to-end. trim() removes leading blank(s)
-		
-		
-//		// Verify entered Password:
-//		System.out.println("   Verifying entered password");
-//// this section had a lot of errors in from the lab instructions so it will probably be the source of issues when it comes time to test
-//		if (passwords.containsKey(chatName)) // is this chatName a KEY in the passwords collection? (have they previously joined?)
-//			{
-//			System.out.println("Password is correct");
-//			storedPassword = passwords.get(chatName);  			// if YES, retrive the stored pw for this chatName
-//			if (providedPassword.equals(storedPassword))     		// case-sensitive compare to pw just entered by user 
-//	   /*PASS*/ { //If this person's ALREADY IN the whosIn collection, then they are "rejoining" from another address!     	   
-//				if (whosIn.containsKey(chatName))				// Is this chatName is already in the chat room?        
-//		/*TESTFOR*/ { // Already in! But we will accept a (re)join from a NEW location.
-//		 /*REJOIN*/ previousOOS = whosIn.get(chatName); 			// get previous oos before we replace it.
-//			 		whosIn.replace(chatName, oos);      			// replace old oos with rejoin oos
-//				    try {
-//				    	previousOOS.writeObject("Session terminated due to rejoin from another location.");
-//				        previousOOS.close(); 						// shut down previous connection. (this prompts leave processing)
-//				    } catch (IOException e) {
-//				        // TODO Auto-generated catch block
-//				        e.printStackTrace();
-//				    }
-//				    System.out.println(chatName + " is rejoining.");
-//				    }                         
-//				}
-//				else // a password was retrieved from the passwords collection, but entered pw is not = to it.
-//		/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
-//		/* PW */try {
-//					oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
-//					oos.close(); // hang up.
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				System.out.println("Invalid password: " + providedPassword + " instead of " + storedPassword + " for " + chatName);
-//				return;      // and kill this client thread
-//				} 
-//			} // end of processing for the case: pw was found in the passwords collection
-//			else // If chatName is NOT IN the passwords collection then this chatName has NEVER joined before. (TOP if above)
-//				{ // So we will be happy to join them now, and ACCEPT (vs. test) their provided password.
-//				passwords.put(chatName, providedPassword);               /*NEVER */
-//				savePasswords(); // save updated passwords list on disk./*JOINED*/
-//				System.out.println(chatName + " is a new client in the chat room.");
-//				}
-				
-		
-//		// JOIN Processing: 
-//		System.out.println("   join processing");
-//		// also thinks it needs more try/catch blocks that were not included in the original code
-//		try {
-//			oos.writeObject("Welcome to the chat room " + chatName + " !");
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} // send "join is successful" to new client
-//		
-//		whosIn.put(chatName,oos);   // add new-join client
-//		System.out.println(chatName + " is joining"); // trace message on server console 
-		
-//		String[] whosInArray = whosIn.keySet().toArray(new String[0]);
-//		Arrays.sort(whosInArray); // note the sort() method is not in the array object, it is in a separate Arrays class.
-//		
-//		sendToAllClients("Welcome to " + chatName + " who has just joined (or rejoined) the chat room!");    
-//		sendToAllClients(whosInArray);
-//
-//		// Now, as a debug trace message, show on the server console the clients that are "in the chat room".
-//		// Note we sent a who's-in ARRAY over the network to all the clients, and this little snippet of code
-//		// is simply adding them to a single String so we can print it on the server console.
-//
-//		String whosInString = "";
-//		for (String name : whosInArrayinstance variable)
-//		     whosInString += name + ", ";
-//		System.out.println("Currently in the chat room: " + whosInString));
-		
-		// close out join processing code:
-		
-		
+
 		System.out.println("end of runnable \n \n");
 	} // end of runnable
+	
+	
+	
+	private synchronized void sendToAllClients(Object message) // "synchronized" restricts client
+	{                                                        //  threads to enter one-at-a-time
+		System.out.println("   Entered sendToAllClients()");
+		ObjectOutputStream[] oosArray = whosIn.values().toArray(new ObjectOutputStream[0]);
+		for (ObjectOutputStream clientOOS : oosArray)
+	    {
+			try {clientOOS.writeObject(message);}
+			catch (IOException e) {} // do nothing if send error because it's probably
+	    }
+	} // end of sendToAllClients()
+	
 	
 	
 	private synchronized void savePasswords() 	// writing the passwords collection from memory to disk
