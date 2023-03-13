@@ -64,7 +64,9 @@ public class ChatRoomServer implements Runnable
 	
 	public void run() 														// client threads enter here
 	{
-		System.out.println("\nEntered run()");
+		String newline = System.getProperty("line.separator");
+		//System.out.println("\nEntered run()");
+		System.out.println(newline);
 		
 		// declare local variables:
 		Socket             s                = null;
@@ -81,7 +83,8 @@ public class ChatRoomServer implements Runnable
 		try {
 		    s = ss.accept(); 												// wait for next client to connect
 		    clientAddress = s.getInetAddress().getHostAddress();
-		    System.out.println("New client connecting from " + clientAddress);
+		    //System.out.println("New client connecting from " + clientAddress);
+		    System.out.println(chatName + " connecting from " + clientAddress);
 		    ois = new ObjectInputStream(s.getInputStream());   				// Don't make ois and oos in ADJACENT statements.
 		    joinMessage = ((String) ois.readObject()).trim();  				// Must cast 1st message read from type Object to String.
 		    oos = new ObjectOutputStream(s.getOutputStream()); 				// trim() drops leading/trailing (but not imbeded) blanks.
@@ -139,6 +142,8 @@ public class ChatRoomServer implements Runnable
 			sendToAllClients(whosInArray);									// Now, as a debug trace message, show on the server console the clients that are "in the chat room".
 																			// Note we sent a who's-in ARRAY over the network to all the clients, and this little snippet of code
 																			// is simply adding them to a single String so we can print it on the server console.
+			System.out.println("Sending 'Welcome to TERMINALBUBBA who just joined (or rejoined) the chat room!' to all clients.");
+			
 			String whosInString = "";
 			for (String name : whosInArray)
 			     whosInString += name + ", ";
@@ -173,33 +178,39 @@ public class ChatRoomServer implements Runnable
 				Object message = ois.readObject(); 							// wait for this client to send something. 
 				System.out.println("Received '" + message + "' from " + chatName); // write debug trace to server console
 				sendToAllClients(chatName + " says: " + message);
+				System.out.println("Sending '" + chatName + " says: " + message + "' to all clients.");
 		    }
 		} 
 		catch(Exception e) 													// connection from client failed, probably because they left the chat room!
 		{
 // LEAVE Processing 
-			System.out.println("   Entering Leave Processing");
+			System.out.println("IN LEAVE PROCESSING");
+			
 			ObjectOutputStream currentOOS = whosIn.get(chatName); // retrieve pointer to the object "associated with" chatName key (an OOS)
+			System.out.println("old OOS: " + oos);
+			System.out.println("new OOS: " + currentOOS);
+			
 			if (currentOOS == oos) // whosIn OOS is the same as this thread's oos. So this is a CURRENT SESSION thread leaving. 
-			   {                   // So do normal leave processing    
-			   whosIn.remove(chatName);
-			   sendToAllClients("Goodbye to " + chatName + " who just left the chat room.");
-			   //System.out.println("Goodbye to " + chatName + " who just left the chat room.");
-			   
-			   //sending an updated list of who is in the chatroom using the same method as when joining the server
-			   String[] whosInArray = whosIn.keySet().toArray(new String[0]);
-			   Arrays.sort(whosInArray);
-			   String whosInString = "";
-			   for (String name : whosInArray)
-				   whosInString += name + ", ";
-			   //System.out.println("Currently in the chat room: " + whosInString);
-			   sendToAllClients("Currently in the chat room: " + whosInString);
-			   }
+				{  
+				System.out.println(chatName + " is leaving.");
+				whosIn.remove(chatName);
+				sendToAllClients("Goodbye to " + chatName + " who just left the chat room.");
+				System.out.println("Sending: 'Goodbye to " + chatName + " who just left the chat room.' to all clients");
+	
+				//sending an updated list of who is in the chat room using the same method as when joining the server
+				String[] whosInArray = whosIn.keySet().toArray(new String[0]);
+				Arrays.sort(whosInArray);
+				String whosInString = "";
+				for (String name : whosInArray)
+					whosInString += name + ", ";
+				sendToAllClients("Currently in the chat room: " + whosInString);
+				System.out.println("Currently in the chat room: " + whosInString);
+				}
 
 		}
 		
 		
-		System.out.println("end of runnable \n");
+		//System.out.println("end of runnable \n");
 	} // end of runnable
 	
 	
@@ -218,7 +229,8 @@ public class ChatRoomServer implements Runnable
 	
 	private synchronized void savePasswords() 								// writing the passwords collection from memory to disk
 	{ 
-		System.out.println("Entered savePasswords()");
+		//System.out.println("   Entered savePasswords()");
+		System.out.println("Saving new user password...");
 		try {
 			FileOutputStream   fos = new FileOutputStream("passwords.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
