@@ -60,6 +60,9 @@ public class ChatRoomServer implements Runnable
 		{
 			System.out.println("Command line parameters are ignored by ChatRoomServer.");
 		}
+		
+		System.out.println("test print 1");
+		
 		new ChatRoomServer();
 		
 	} //end of main
@@ -133,15 +136,25 @@ public class ChatRoomServer implements Runnable
 				/*TESTFOR*/{ // Already in! But we will accept a (re)join from a NEW location.
 				/*REJOIN*/ previousOOS = whosIn.get(chatName); 			// get previous oos before we replace it.
 				           whosIn.replace(chatName, oos);      			// replace old oos with rejoin oos
-				           previousOOS.writeObject("Session terminated due to rejoin from another location.");
-				           previousOOS.close(); 						// shut down previous connection. (this prompts leave processing)
+				           try {
+							previousOOS.writeObject("Session terminated due to rejoin from another location.");
+							previousOOS.close(); 						// shut down previous connection. (this prompts leave processing)
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				           System.out.println(chatName + " is rejoining.");
 				           }                         
-				        }  
+				        }
 				     else // a password was retrieved from the passwords collection, but entered pw is not = to it.
 				/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
-				/* PW */oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
-				        oos.close(); // hang up.
+				/* PW */try {
+					oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
+					oos.close(); // hang up.
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				        System.out.println("Invalid password: " + providedPassword + " instead of " + storedPassword + " for " + chatName);
 				        return;      // and kill this client thread
 				        } 
@@ -170,5 +183,6 @@ public class ChatRoomServer implements Runnable
 	    System.out.println("passwords collection cannot be saved on disk: " + e);
 	    }
 	}
+	
 	
 } // end of class
