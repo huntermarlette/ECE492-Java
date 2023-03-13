@@ -22,6 +22,7 @@ public class ChatRoomServer implements Runnable
 	
 	public ChatRoomServer() throws Exception  	// My constructor method
 	{ // There is no GUI in this program so the constructor is much more simple
+		//System.out.println("Entered constructor method");
 		
 		ss = new ServerSocket(2222); // will throw an Exception if port 2222 is not available
 		System.out.println("ChatRoomServer is up at " + InetAddress.getLocalHost().getHostAddress() + " on port " + ss.getLocalPort());
@@ -38,7 +39,7 @@ public class ChatRoomServer implements Runnable
 	        {
 	    	System.out.println("passwords.ser is not found, so an empty collection will be used.");
 	        }
-		
+		//System.out.println("\n");
 		new Thread(this).start(); // this just-created thread branches into our run() method, but the
         // thread that called this "new" statement continues on!
 		
@@ -54,15 +55,14 @@ public class ChatRoomServer implements Runnable
 	
 	public static void main(String[] args) throws Exception 
 	{
+		//System.out.println("Entered main()");
 		System.out.println("Welcome to Lab 3 - ChatRoomServer by Hunter Marlette");
 		
 		if (args.length != 0)	// if any arguments are passed in, print that they will be ignored
 		{
 			System.out.println("Command line parameters are ignored by ChatRoomServer.");
 		}
-		
-		System.out.println("test print 1");
-		
+		//System.out.println("test print 1");
 		new ChatRoomServer();
 		
 	} //end of main
@@ -70,6 +70,8 @@ public class ChatRoomServer implements Runnable
 	
 	public void run() 	// client threads enter here
 	{
+		System.out.println("\nEntered run()");
+		
 		// declare local variables:
 		Socket             s                = null;
 		ObjectInputStream  ois              = null;
@@ -82,6 +84,7 @@ public class ChatRoomServer implements Runnable
 		String             clientAddress    = null;
 		
 		// accept connections from chat clients:
+		System.out.println("   accepting communication from client");
 		try {
 		    s = ss.accept(); // wait for next client to connect
 		    clientAddress = s.getInetAddress().getHostAddress();
@@ -110,6 +113,7 @@ public class ChatRoomServer implements Runnable
 		// one thread at a time...
 		
 		// continuing to the JOIN Processing:
+		System.out.println("   Continuing to JOIN Processing");
 		int blankOffset = joinMessage.indexOf(" ");          // scan joinMessage for an imbedded blank
 		if (blankOffset < 0)                                 // negative offset return means no blank found.
 			{
@@ -117,72 +121,89 @@ public class ChatRoomServer implements Runnable
 				System.out.println("No blank in join message: " + joinMessage);
 				oos.writeObject("Invalid format in 1st message."); // not specific in case of hacker caller
 				oos.close(); // kill connection
-		       	}
-			catch(Exception e) {}
+		    } catch(Exception e) {}
 			return;      // kill client session thread
 			} 
 		chatName = joinMessage.substring(0,blankOffset).toUpperCase(); // 2 parm substring() form is from-to (non-inclusive)
 		providedPassword = joinMessage.substring(blankOffset).trim();  // 1 parm substring() means here-to-end. trim() removes leading blank(s)
 		
-		// probably should add a test print statement here?!?
 		
 		// Verify entered Password:
+		System.out.println("   Verifying entered password");
+// this section had a lot of errors in from the lab instructions so it will probably be the source of issues when it comes time to test
 		if (passwords.containsKey(chatName)) // is this chatName a KEY in the passwords collection? (have they previously joined?)
-				   {
-				   storedPassword = passwords.get(chatName);  			// if YES, retrive the stored pw for this chatName
-				   if (providedPassword.equals(storedPassword))     		// case-sensitive compare to pw just entered by user 
-				/*PASS*/{ //If this person's ALREADY IN the whosIn collection, then they are "rejoining" from another address!     	   
-				        if (whosIn.containsKey(chatName))				// Is this chatName is already in the chat room?        
-				/*TESTFOR*/{ // Already in! But we will accept a (re)join from a NEW location.
-				/*REJOIN*/ previousOOS = whosIn.get(chatName); 			// get previous oos before we replace it.
-				           whosIn.replace(chatName, oos);      			// replace old oos with rejoin oos
-				           try {
-							previousOOS.writeObject("Session terminated due to rejoin from another location.");
-							previousOOS.close(); 						// shut down previous connection. (this prompts leave processing)
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				           System.out.println(chatName + " is rejoining.");
-				           }                         
-				        }
-				     else // a password was retrieved from the passwords collection, but entered pw is not = to it.
-				/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
-				/* PW */try {
+			{
+			System.out.println("Password is correct");
+			storedPassword = passwords.get(chatName);  			// if YES, retrive the stored pw for this chatName
+			if (providedPassword.equals(storedPassword))     		// case-sensitive compare to pw just entered by user 
+	   /*PASS*/ { //If this person's ALREADY IN the whosIn collection, then they are "rejoining" from another address!     	   
+				if (whosIn.containsKey(chatName))				// Is this chatName is already in the chat room?        
+		/*TESTFOR*/ { // Already in! But we will accept a (re)join from a NEW location.
+		 /*REJOIN*/ previousOOS = whosIn.get(chatName); 			// get previous oos before we replace it.
+			 		whosIn.replace(chatName, oos);      			// replace old oos with rejoin oos
+				    try {
+				    	previousOOS.writeObject("Session terminated due to rejoin from another location.");
+				        previousOOS.close(); 						// shut down previous connection. (this prompts leave processing)
+				    } catch (IOException e) {
+				        // TODO Auto-generated catch block
+				        e.printStackTrace();
+				    }
+				    System.out.println(chatName + " is rejoining.");
+				    }                         
+				}
+				else // a password was retrieved from the passwords collection, but entered pw is not = to it.
+		/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
+		/* PW */try {
 					oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
 					oos.close(); // hang up.
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				        System.out.println("Invalid password: " + providedPassword + " instead of " + storedPassword + " for " + chatName);
-				        return;      // and kill this client thread
-				        } 
-				   } // end of processing for the case: pw was found in the passwords collection
-				else // If chatName is NOT IN the passwords collection then this chatName has NEVER joined before. (TOP if above)
-				   { // So we will be happy to join them now, and ACCEPT (vs. test) their provided password.
-				   passwords.put(chatName, providedPassword);               /*NEVER */
-				   savePasswords(); // save updated passwords list on disk./*JOINED*/
-				   System.out.println(chatName + " is a new client in the chat room.");
-				   }
+				System.out.println("Invalid password: " + providedPassword + " instead of " + storedPassword + " for " + chatName);
+				return;      // and kill this client thread
+				} 
+			} // end of processing for the case: pw was found in the passwords collection
+			else // If chatName is NOT IN the passwords collection then this chatName has NEVER joined before. (TOP if above)
+				{ // So we will be happy to join them now, and ACCEPT (vs. test) their provided password.
+				passwords.put(chatName, providedPassword);               /*NEVER */
+				savePasswords(); // save updated passwords list on disk./*JOINED*/
+				System.out.println(chatName + " is a new client in the chat room.");
+				}
 				
-				
+		
+		// JOIN Processing: 
+		System.out.println("   join processing");
+		// also thinks it needs more try/catch blocks that were not included in the original code
+		try {
+			oos.writeObject("Welcome to the chat room " + chatName + " !");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // send "join is successful" to new client
+		
+		whosIn.put(chatName,oos);   // add new-join client
+		System.out.println(chatName + " is joining"); // trace message on server console 
+		
+		
+		System.out.println("end of runnable \n \n");
 	} // end of runnable
 	
 	
 	private synchronized void savePasswords() 	// writing the passwords collection from memory to disk
 	{ 
-	try {
-		FileOutputStream   fos = new FileOutputStream("passwords.ser");
-	    ObjectOutputStream oos = new ObjectOutputStream(fos);
-	    oos.writeObject(passwords);
-	    oos.close();
+		System.out.println("Entered savePasswords()");
+		try {
+			FileOutputStream   fos = new FileOutputStream("passwords.ser");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(passwords);
+			oos.close();
 	    }
-	catch(Exception e)
+		catch(Exception e)
 	    {
-	    System.out.println("passwords collection cannot be saved on disk: " + e);
+			System.out.println("passwords collection cannot be saved on disk: " + e);
 	    }
-	}
+	} // end of savePasswords()
 	
 	
 } // end of class
