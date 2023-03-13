@@ -91,10 +91,7 @@ public class ChatRoomServer implements Runnable
 		    ois = new ObjectInputStream(s.getInputStream());   // Don't make ois and oos in ADJACENT statements.
 		    joinMessage = ((String) ois.readObject()).trim();  // Must cast 1st message read from type Object to String.
 		    oos = new ObjectOutputStream(s.getOutputStream()); // trim() drops leading/trailing (but not imbeded) blanks.
-		    // add a while true loop here?!?
-		    
-		    // continuing to the JOIN Processing:
-			//System.out.println("   Continuing to JOIN Processing");
+
 			int blankOffset = joinMessage.indexOf(" ");          // scan joinMessage for an imbedded blank
 			if (blankOffset < 0)                                 // negative offset return means no blank found.
 			{
@@ -107,17 +104,14 @@ public class ChatRoomServer implements Runnable
 			} 
 			chatName = joinMessage.substring(0,blankOffset).toUpperCase(); // 2 parm substring() form is from-to (non-inclusive)
 			providedPassword = joinMessage.substring(blankOffset).trim();  // 1 parm substring() means here-to-end. trim() removes leading blank(s)
-			//System.out.println("   Checkpoint 2");
+
 			
-			// Verify entered Password:
-			//System.out.println("   Verifying entered password");
-	// this section had a lot of errors in from the lab instructions so it will probably be the source of issues when it comes time to test
 			if (passwords.containsKey(chatName)) // is this chatName a KEY in the passwords collection? (have they previously joined?)
 			{
 				storedPassword = passwords.get(chatName);  			// if YES, retrive the stored pw for this chatName
 				if (providedPassword.equals(storedPassword))     		// case-sensitive compare to pw just entered by user 
 	   /*PASS*/ { //If this person's ALREADY IN the whosIn collection, then they are "rejoining" from another address!  
-					System.out.println("   Password is correct");
+					//System.out.println("   Password is correct");
 					if (whosIn.containsKey(chatName))				// Is this chatName is already in the chat room?        
 		/*TESTFOR*/ { // Already in! But we will accept a (re)join from a NEW location.
 			 /*REJOIN*/ previousOOS = whosIn.get(chatName); 			// get previous oos before we replace it.
@@ -128,7 +122,7 @@ public class ChatRoomServer implements Runnable
 					}                         
 				} else // a password was retrieved from the passwords collection, but entered pw is not = to it.
 		/*FAIL*/{ // Someone is trying to use an already-taken chat name, or they forgot their pw.
-					System.out.println("   Password is NOT correct!");
+					//System.out.println("   Password is NOT correct!");
 		/* PW */	oos.writeObject("Your entered password " + providedPassword + " is not the same as the password stored for chat name " + chatName);
 					oos.close(); // hang up.
 					System.out.println("Invalid password: " + providedPassword + " instead of " + storedPassword + " for " + chatName);
@@ -141,29 +135,18 @@ public class ChatRoomServer implements Runnable
 				savePasswords(); // save updated passwords list on disk./*JOINED*/
 				System.out.println(chatName + " is a new client in the chat room.");
 			}
-			//System.out.println("   Checkpoint 3");
 			
-			// JOIN Processing: 
-			//System.out.println("   join processing");
-			// also thinks it needs more try/catch blocks that were not included in the original code
-			try {
-				oos.writeObject("Welcome to the chat room " + chatName + " !");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} // send "join is successful" to new client
-			
+
+			oos.writeObject("Welcome to the chat room " + chatName + " !"); // send "join is successful" to new client
 			whosIn.put(chatName,oos);   // add new-join client
 			System.out.println(chatName + " is joining"); // trace message on server console 
 			
-			//System.out.println("   Checkpoint 4");
 			
 			String[] whosInArray = whosIn.keySet().toArray(new String[0]);
 			Arrays.sort(whosInArray); // note the sort() method is not in the array object, it is in a separate Arrays class.
 			
 			sendToAllClients("Welcome to " + chatName + " who has just joined (or rejoined) the chat room!");    
 			sendToAllClients(whosInArray);
-
 			// Now, as a debug trace message, show on the server console the clients that are "in the chat room".
 			// Note we sent a who's-in ARRAY over the network to all the clients, and this little snippet of code
 			// is simply adding them to a single String so we can print it on the server console.
@@ -196,7 +179,6 @@ public class ChatRoomServer implements Runnable
 		// in the ServerSocket for the next client to connect. (Note we only call the accept() method with
 		// one thread at a time...
 		
-
 		System.out.println("end of runnable \n");
 	} // end of runnable
 	
