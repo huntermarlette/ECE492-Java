@@ -38,9 +38,8 @@ public class ChatRoomServer implements Runnable
 	        {
 	    	System.out.println("passwords.ser is not found, so an empty collection will be used.");
 	        }
-//		System.out.println(newline + "Note: I have included all of the command line print statements shown in the solution class we used for Lab 2." + newline + 
-//				"I do not feel that many of them are necesssary but I would rather include too much information than not enough for the purpose of grading." + 
-//				"If you would like to see how my code would actually look in the output terminal without the unnecessary fluff, comment out lines 139, 175, 181, 184, 185, 192, and 226");
+		System.out.println(newline + "Note for grader: I have included all of the command line print statements shown in the solution class we used for Lab 2." + newline + 
+				"I do not feel that many of them are necesssary but I would rather include too much information than not enough for the purpose of grading.");
 		new Thread(this).start(); // this just-created thread branches into our run() method, but the thread that called this "new" statement continues on!
 	} // end of constructor method
 	
