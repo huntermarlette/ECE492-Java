@@ -59,7 +59,7 @@ public class President implements Runnable {
 		}
 		
 // try/catch structure option 2:
-//		while(true) 
+//		while(true)  
 //		{
 //			String statement = br.readLine();
 //			if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
