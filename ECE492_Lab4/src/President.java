@@ -1,9 +1,3 @@
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.Socket;
 
 // ECE492 Java Lab 4 - News Conference - Spring 2023
 	// class 1 - President Class
@@ -13,6 +7,15 @@ import java.net.Socket;
 // Note:
 
 // where do I put the printing to console to welcome the user to the program at the beginning? There is no main() method
+
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.Socket;
 
 
 public class President implements Runnable {
@@ -37,7 +40,7 @@ public class President implements Runnable {
 		// again, I am not sure if this is quite what the program is asking for or not but it seems right
 		// "At the top of run(), load the I/O classes to read the keyboard. (See your Therapist program.)"
 		
-		System.out.println("The phrase 'God Bless America' ends the news conference.");
+		System.out.println("Reminder: The phrase 'God Bless America' ends the news conference.");
 		System.out.println("Enter a statement:");
 		
 		while(true) 
@@ -48,7 +51,11 @@ public class President implements Runnable {
 			{
 				System.out.println("Blank messages are ignored.");
 			} else {																		// proceed if message is not blank
-				whiteHouse.makeAstatement(statement);
+				try{
+					whiteHouse.makeAstatement(statement);
+				} catch(IOException e) {
+					
+				}
 			} // end of if/else statement
 		} // end of while loop
 		System.out.println("The News Conference is over");
