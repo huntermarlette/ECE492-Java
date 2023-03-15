@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.Socket;
 
 // ECE492 Java Lab 4 - News Conference - Spring 2023
 	// class 1 - President Class
@@ -6,20 +12,48 @@
 
 // Note:
 
+// where do I put the printing to console to welcome the user to the program at the beginning? There is no main() method
+
 
 public class President implements Runnable {
 	
 	// instance variables:
+	String newline = System.getProperty("line.separator");
+	whiteHouse whiteHouse;						//this will cause errors until we create the whiteHouse Class
 	
 	
-	public President() {
-		// TODO Auto-generated constructor stub
+	public President(whiteHouse whiteHouse) 	// Constructor Method
+	{
+		this.whiteHouse = whiteHouse; 			//copy local var from stack to program var
+		new Thread(this).start();	// I am not sure if this is actually correct or not, but I think thats what the instructions are asking for
 	} // end of constructor
 	
 	
-	public void run() 
+	
+	public void run() 							// Run() Method
 	{
-		// run method goes here 
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader    br  = new BufferedReader(isr);								// setup user input from console 
+		// again, I am not sure if this is quite what the program is asking for or not but it seems right
+		// "At the top of run(), load the I/O classes to read the keyboard. (See your Therapist program.)"
+		
+		System.out.println("The phrase 'God Bless America' ends the news conference.");
+		System.out.println("Enter a statement:");
+		
+		while(true) 
+		{
+			String statement = br.readLine();
+			if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
+			if (statement.equals("") || statement.equals(" ") || statement.equals("  ") || statement.equals("   ")) 	// checks for blank message
+			{
+				System.out.println("Blank messages are ignored.");
+			} else {																		// proceed if message is not blank
+				whiteHouse.makeAstatement(statement);
+			} // end of if/else statement
+		} // end of while loop
+		System.out.println("The News Conference is over");
+		// (The President thread, encountering the bottom of the run() method, will return to it's Thread object and be terminated, which is appropriate!)
 	} // end of run()
+	
 	
 } // end of class
