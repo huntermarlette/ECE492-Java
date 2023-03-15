@@ -22,7 +22,7 @@ public class President implements Runnable {
 	
 	// instance variables:
 	String newline = System.getProperty("line.separator");
-	whiteHouse whiteHouse;						//this will cause errors until we create the whiteHouse Class
+	WhiteHouse whiteHouse;						//this will cause errors until we create the whiteHouse Class
 	
 	
 	public President(whiteHouse whiteHouse) 	// Constructor Method

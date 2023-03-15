@@ -17,10 +17,19 @@ import java.net.Socket;
 
 
 public class Reporter implements Runnable {
-
-	public Reporter() 							// Constructor Method
+	
+	// instance variables:
+	int        reporterNumber;
+	String     topicOfInterest;
+	WhiteHouse whiteHouse;
+	
+	public Reporter(int reporterNumber, WhiteHouse whiteHouse, String topicOfInterest) // Constructor Method
 	{
+		this.reporterNumber  = reporterNumber;
+		this.whiteHouse      = whiteHouse; //copy local var from stack to program var
+		this.topicOfInterest = topicOfInterest; 
 		
+		new Thread(this).start();
 	} // end of constructor
 
 	public void run() 							// Run() Method
