@@ -37,8 +37,7 @@ public class President implements Runnable {
 	{
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader    br  = new BufferedReader(isr);								// setup user input from console 
-		// again, I am not sure if this is quite what the program is asking for or not but it seems right
-		// "At the top of run(), load the I/O classes to read the keyboard. (See your Therapist program.)"
+		// Not sure if this will work for: "At the top of run(), load the I/O classes to read the keyboard. (See your Therapist program.)"
 		
 		System.out.println("Reminder: The phrase 'God Bless America' ends the news conference.");
 		System.out.println("Enter a statement:");
@@ -47,17 +46,18 @@ public class President implements Runnable {
 		{
 			String statement = br.readLine();
 			if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
-			if (statement.equals("") || statement.equals(" ") || statement.equals("  ") || statement.equals("   ")) 	// checks for blank message
+			if (statement.equals("") || statement.isEmpty()) 							// checks for blank message
 			{
 				System.out.println("Blank messages are ignored.");
 			} else {																		// proceed if message is not blank
 				try{
 					whiteHouse.makeAstatement(statement);
-				} catch(IOException e) {
-					
+				} catch(IOException e) {					// THIS IS NOT WHAT HE ASKED FOR BUT I DO NOT KNOW WHAT TO DO OTHERWISE!!!
+					break;
 				}
 			} // end of if/else statement
 		} // end of while loop
+		
 		System.out.println("The News Conference is over");
 		// (The President thread, encountering the bottom of the run() method, will return to it's Thread object and be terminated, which is appropriate!)
 	} // end of run()
