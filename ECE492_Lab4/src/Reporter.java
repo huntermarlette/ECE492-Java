@@ -23,18 +23,25 @@ public class Reporter implements Runnable {
 	String     topicOfInterest;
 	WhiteHouse whiteHouse;
 	
+	
 	public Reporter(int reporterNumber, WhiteHouse whiteHouse, String topicOfInterest) // Constructor Method
 	{
 		this.reporterNumber  = reporterNumber;
-		this.whiteHouse      = whiteHouse; //copy local var from stack to program var
+		this.whiteHouse      = whiteHouse; 			//copy local var from stack to program var
 		this.topicOfInterest = topicOfInterest; 
 		
 		new Thread(this).start();
 	} // end of constructor
 
-	public void run() 							// Run() Method
+	
+	
+	public void run() 								// Run() Method
 	{
-		
+		String presidentsStatement = whiteHouse.attendTheNewsConference(topicOfInterest);
+		System.out.println("Reporter #" + reporterNumber + " has returned from the news conference."
+		                 + " Reporter's topic-of-interest was: " + topicOfInterest
+		                 + ". President's statement was: " + presidentsStatement);
 	} // end of run()
+	
 	
 } // end of class

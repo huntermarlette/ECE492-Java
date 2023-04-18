@@ -4,7 +4,11 @@
 // Hunter Marlette
 // Student ID # 200289830
 
+// The wait()/notify() multithreading architecture
+
+
 // Note:
+
 
 // where do I put the printing to console to welcome the user to the program at the beginning? There is no main() method
 
@@ -18,17 +22,19 @@ import java.net.ConnectException;
 import java.net.Socket;
 
 
-public class President implements Runnable {
+public class President implements Runnable 
+{
 	
 	// instance variables:
 	String newline = System.getProperty("line.separator");
 	WhiteHouse whiteHouse;						//this will cause errors until we create the whiteHouse Class
 	
 	
-	public President(whiteHouse whiteHouse) 	// Constructor Method
+	public President(WhiteHouse whiteHouse) 	// Constructor Method
 	{
 		this.whiteHouse = whiteHouse; 			//copy local var from stack to program var
 		new Thread(this).start();	// I am not sure if this is actually correct or not, but I think thats what the instructions are asking for
+		// this just-created thread branches into our run() method, but the thread that called this "new" statement continues on!
 	} // end of constructor
 	
 	
@@ -46,12 +52,14 @@ public class President implements Runnable {
 			while(true) 
 			{
 				String statement = br.readLine();
-				if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
-				if (statement.equals("") || statement.isEmpty()) 							// checks for blank message
+				//if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
+						// this may need to go AFTER the makeAstatement() line according to the instructions but I am not sure.
+				if (statement.equals("") || statement.isEmpty()) 						// checks for blank message
 				{
 					System.out.println("Blank messages are ignored.");
-				} else {																		// proceed if message is not blank
-					whiteHouse.makeAstatement(statement);							
+				} else {																// proceed if message is not blank
+					whiteHouse.makeAstatement(statement);	
+					if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
 				} // end of if/else statement
 			} // end of while loop
 		} catch(IOException e) {
