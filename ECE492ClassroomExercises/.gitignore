@@ -5,3 +5,13 @@
 /Lecture2_Server.class
 /Lecture2_Client.class
 /Lecture4_SayHelloTo.class
+/Lecture12_ExpressionCalculator.class
+/Lecture14_TellerServerInterface.class
+/Lecture14_EchoTellerClient.class
+/Lecture14_EchoBankServer.class
+/Lecture20_Account.class
+/Lecture24_CashAccount.class
+/Lecture24_CheckingAccount.class
+/Lecture24_SavingsAccount.class
+/Lecture24_OverdraftException.class
+/Lecture24_AccountTester.class
