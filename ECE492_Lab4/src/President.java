@@ -4,14 +4,6 @@
 // Hunter Marlette
 // Student ID # 200289830
 
-// The wait()/notify() multithreading architecture
-
-
-// Note:
-
-
-// where do I put the printing to console to welcome the user to the program at the beginning? There is no main() method
-
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

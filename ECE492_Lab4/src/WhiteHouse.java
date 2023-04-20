@@ -7,6 +7,7 @@
 
 
 public class WhiteHouse {	// The meeting place for reporters and speakers
+	
 	// instance variable(s):
 	String presidentsStatement;
 
