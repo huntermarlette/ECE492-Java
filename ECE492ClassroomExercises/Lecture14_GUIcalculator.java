@@ -49,6 +49,7 @@ public class Lecture14_GUIcalculator implements ActionListener
 	// the document told me to put the instance variables in-between main and the constructor instead of at the top of the class?!?
 	
 	String expression;		// I had to add this to rectify errors with the section beginning with "String originalExpression = expression;"
+	String forXString;		// defined to prevent errors in step 14 code 
 	
 	//GUI Objects
 	private JFrame       window              = new JFrame("EXPRESSION CALCULATOR    Operators are + - * / ^ r      Operands are numbers, e, pi and pa (previous answer) ");
@@ -141,7 +142,7 @@ public class Lecture14_GUIcalculator implements ActionListener
         
 
         String originalExpression = expression;
-        System.out.println(expression);
+        //System.out.println(expression);
         
         // do operand substitution for e, pi and pa
         expression = expression.replace("pa", previousAnswer);
@@ -207,7 +208,49 @@ public class Lecture14_GUIcalculator implements ActionListener
             return;
             }
         
-        
+        // calculate the value of the expression
+        boolean mustReenter = false;
+        double result = 0;
+        switch (operator)
+        {
+        case '+' : result = leftNumber + rightNumber;         break;
+        case '-' : result = leftNumber - rightNumber;         break;
+        case '*' : result = leftNumber * rightNumber;         break;
+        case '/' : result = leftNumber / rightNumber;         break;
+        case '^' : result = Math.pow(leftNumber,rightNumber); break;
+        case 'r' : if (leftNumber > 0){result = Math.pow( leftNumber,1/rightNumber);break;} 
+                   else if (rightNumber%2 == 0) {mustReenter = true; break;}
+                   else {result =-Math.pow(-leftNumber,1/rightNumber);break;}
+        }
+        // Note the Math class offers square root and cube root methods, but the form used above allows higher-order roots. 
+        if (mustReenter)
+           {
+           errorTextField.setText("Invalid root expression. Reenter expression.");
+           errorTextField.setBackground(Color.pink);
+           return;
+           }
+     	     	
+        // At this point entered expression and x values are valid.
+        // (no exception was thrown!) so save them for recall.
+        previousExpression = expression;
+        previousForXString = forXString;
+        previousAnswer     = String.valueOf(result);
+
+        // Show the expression and it's value in the log area on GUI
+        displayTextArea.append(newLine + originalExpression + " = " + result);
+        System.out.println(originalExpression + " = " + result);		// I added this just to help with debugging and visuals
+
+        if (originalExpression.contains("x") || originalExpression.contains("X"))
+           {
+           displayTextArea.append(" for x = " + forXString);
+           }
+
+        // scroll down the log area		  
+        displayTextArea.setCaretPosition(displayTextArea.getDocument().getLength()); // scroll to bottom
+        expressionTextField.setText(""); 		// clear expression
+        forXTextField.setText("");       		// clear x field
+        expressionTextField.requestFocus();		// set cursor in.  
+        return;
         
         
         
