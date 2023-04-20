@@ -52,7 +52,7 @@ public class President implements Runnable
 				} else {																// proceed if message is not blank
 					System.out.println("Statement: '" + statement + "'");
 					whiteHouse.makeAstatement(statement);	
-					if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
+					if(statement.contains("God bless America") || statement.contains("God Bless America") || statement.contains("god bless america") || statement.contains("GOD BELSS AMERICA")) break;
 				} // end of if/else statement
 			} // end of while loop
 		} catch(IOException e) {

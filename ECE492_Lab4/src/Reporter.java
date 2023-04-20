@@ -38,9 +38,8 @@ public class Reporter implements Runnable {
 	public void run() 								// Run() Method
 	{
 		//System.out.println("Test Reporter.run() ");
-		
 		String presidentsStatement = whiteHouse.attendTheNewsConference(topicOfInterest);
-		System.out.println("presidentStatement = " + presidentsStatement);
+		//System.out.println("presidentStatement = " + presidentsStatement);
 		System.out.println("Reporter #" + reporterNumber + " has returned from the news conference."
 		                 + " Reporter's topic-of-interest was: " + topicOfInterest
 		                 + ". President's statement was: " + presidentsStatement);

@@ -6,7 +6,6 @@
 // The wait()/notify() multithreading architecture
 
 
-
 // STEPS: 
 	// load the WhiteHouse Object first
 	
@@ -18,6 +17,10 @@
 
 	// Load the President object last, passing the address of the WhiteHouse object to the President's constructor. 
 		// The President object will then prompt you, the user, to enter a statement, so we want everything else to be loaded and ready to run when the President speaks!
+
+
+// Arguments: "world hunger" "world peace" "Donald Trump" "universal health care" "God bless America"
+
 
 
 public class StartTheNewsConference {
@@ -49,7 +52,7 @@ public class StartTheNewsConference {
 				//System.out.println(newline + "i = " + i);
 				//System.out.println("Topic of Interest #" + i + " = " + args[i]);
 				topic = args[i];
-				num = i;
+				num = i+1;
 				//System.out.println("Topic of Interest #" + num + " = " + topic);
 				
 				if(topic.equals("God bless America") || topic.equals("God Bless America") || topic.equals("god bless america") || topic.equals("GOD BELSS AMERICA")) 
@@ -58,7 +61,7 @@ public class StartTheNewsConference {
 				{
 					System.out.println("'God bless America' is not an acceptable topic of interest, and therefore this entry will be ignored.");	
 			 	} else {
-					//System.out.println("Topic of Interest #" + num + " = " + topic);
+					System.out.println("Topic of Interest #" + num + " = " + topic);
 					// Load a reporter object for each of the topics given
 					// passing the address of the WhiteHouse object and one of the topics-of-interest command line parameters and a reporter number to each Reporter's constructor.
 					
@@ -68,7 +71,7 @@ public class StartTheNewsConference {
 			 	}
 			}
 		} else {
-			System.out.println("No Topics of interest passed into the program, please restart and try again?");
+			System.out.println("No Topics of interest passed into the program, please restart and try again. ");
 		}
 	
 		
