@@ -19,7 +19,7 @@
 		// The President object will then prompt you, the user, to enter a statement, so we want everything else to be loaded and ready to run when the President speaks!
 
 
-// Arguments: "world hunger" "world peace" "Donald Trump" "universal health care" "God bless America"
+// Arguments: "world hunger" "world peace" "Donald Trump" "universal health care" "universal health care" "God bless America"
 
 
 
@@ -34,55 +34,40 @@ public class StartTheNewsConference {
 
 		
 		// Instance Variables:
-		String topic;				// current topic being loaded
-		int num;					// reporter number - "let the loop number be the reporter number" 
+		String topic;									// current topic being loaded
+		int num;										// reporter number - "let the loop number be the reporter number" 
 		
-		//new WhiteHouse();
-		WhiteHouse whiteHouse = new WhiteHouse();		// load the WhiteHouse Object first???
+		WhiteHouse whiteHouse = new WhiteHouse();		// load the WhiteHouse Object first
 		
-			
-		// counting arguments
-		if(args.length > 0) 		// catches when the person does not enter any arguments
+		if(args.length > 0) 							// catches when the person does not enter any arguments
 		{
-			//System.out.println("Test 1");
-			//for (int i = args.length-1; i >= 0; i--) 
 			for(int i = 0; i <= args.length-1; i++)
 			// "When you're loading the Reporter objects, you can go into a for loop that iterates through the args array of command line parameters"
 			{
-				//System.out.println(newline + "i = " + i);
-				//System.out.println("Topic of Interest #" + i + " = " + args[i]);
 				topic = args[i];
 				num = i+1;
-				//System.out.println("Topic of Interest #" + num + " = " + topic);
 				
 				if(topic.equals("God bless America") || topic.equals("God Bless America") || topic.equals("god bless america") || topic.equals("GOD BELSS AMERICA")) 
 				// check for "God Bless America" being falsely used as a topic of interest:
-					// "Probably a good idea to not accept "God bless America" as a topic-of-interest." from the instructions
 				{
 					System.out.println("'God bless America' is not an acceptable topic of interest, and therefore this entry will be ignored.");	
 			 	} else {
-					System.out.println("Topic of Interest #" + num + " = " + topic);
+					//System.out.println("Topic of Interest #" + num + " = " + topic);
+					
+					//Reporter repo = new Reporter(num, whiteHouse, topic);
+			 		new Reporter(num, whiteHouse, topic);
 					// Load a reporter object for each of the topics given
 					// passing the address of the WhiteHouse object and one of the topics-of-interest command line parameters and a reporter number to each Reporter's constructor.
-					
-					//Reporter.Reporter(num, whiteHouse, topic);
-					Reporter repo = new Reporter(num, whiteHouse, topic);
-					//System.out.println("New Reporter Created?");
 			 	}
-			}
+			} // end of for loop
 		} else {
 			System.out.println("No Topics of interest passed into the program, please restart and try again. ");
-		}
+		} // end of if/else statement
 	
-		
 		// Load the President object last, passing the address of the WhiteHouse object to the President's constructor. 
 			// The President object will then prompt you, the user, to enter a statement, so we want everything else to be loaded and ready to run when the President speaks!
-		//President pres = new President(whiteHouse);
 		new President(whiteHouse);
 		
-		
-		
-		
-	}
+	} // end of main
 
-}
+} // end of class

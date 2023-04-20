@@ -4,16 +4,6 @@
 // Hunter Marlette
 // Student ID # 200289830
 
-// Note:
-
-
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.Socket;
 
 
 public class Reporter implements Runnable {
@@ -37,9 +27,16 @@ public class Reporter implements Runnable {
 	
 	public void run() 								// Run() Method
 	{
-		//System.out.println("Test Reporter.run() ");
+		//NOTE: the directions said to put this print function at the top of the attendTheNewsConference() Method, 
+			// but it not possible to print the reporter number in that method unless I changed the method to pass
+		// in the reporter number variable. So I put it here above the call instead. 
+		System.out.println("Reporter #" + reporterNumber + " has arrived at the news conference."
+	                + " Reporter's topic-of-interest was: " + topicOfInterest);
+			// announces the arrival of the Reporter at the news conference (and prints the Reporter's number and topic-of-interest)
+		
+		
 		String presidentsStatement = whiteHouse.attendTheNewsConference(topicOfInterest);
-		//System.out.println("presidentStatement = " + presidentsStatement);
+		
 		System.out.println("Reporter #" + reporterNumber + " has returned from the news conference."
 		                 + " Reporter's topic-of-interest was: " + topicOfInterest
 		                 + ". President's statement was: " + presidentsStatement);

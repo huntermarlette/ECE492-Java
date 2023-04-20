@@ -6,17 +6,13 @@
 
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.Socket;
+
 
 
 public class President implements Runnable 
 {
-	
 	// instance variables:
 	String newline = System.getProperty("line.separator");
 	WhiteHouse whiteHouse;						//this will cause errors until we create the whiteHouse Class
@@ -24,9 +20,8 @@ public class President implements Runnable
 	
 	public President(WhiteHouse whiteHouse) 	// Constructor Method
 	{
-		this.whiteHouse = whiteHouse; 			//copy local var from stack to program var
-		new Thread(this).start();	// I am not sure if this is actually correct or not, but I think thats what the instructions are asking for
-		// this just-created thread branches into our run() method, but the thread that called this "new" statement continues on!
+		this.whiteHouse = whiteHouse; 			// copy local var from stack to program var
+		new Thread(this).start();				// this just-created thread branches into our run() method, but the thread that called this "new" statement continues on!
 	} // end of constructor
 	
 	
@@ -35,22 +30,19 @@ public class President implements Runnable
 	{
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader    br  = new BufferedReader(isr);								// setup user input from console 
-		// Not sure if this will work for: "At the top of run(), load the I/O classes to read the keyboard. (See your Therapist program.)"
 		
 		System.out.println(newline + "Reminder: The phrase 'God Bless America' ends the news conference.");
 		System.out.println("Enter a statement:");
-// try/catch structure option 1:
+
 		try {
 			while(true) 
 			{
 				String statement = br.readLine();
-				//if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
-						// this may need to go AFTER the makeAstatement() line according to the instructions but I am not sure.
 				if (statement.equals("") || statement.isEmpty()) 						// checks for blank message
 				{
 					System.out.println("Blank messages are ignored.");
 				} else {																// proceed if message is not blank
-					System.out.println("Statement: '" + statement + "'");
+					//System.out.println("Statement: '" + statement + "'");				// optional print statement I like to have but isn't called for in the documentation.
 					whiteHouse.makeAstatement(statement);	
 					if(statement.contains("God bless America") || statement.contains("God Bless America") || statement.contains("god bless america") || statement.contains("GOD BELSS AMERICA")) break;
 				} // end of if/else statement
@@ -59,26 +51,9 @@ public class President implements Runnable
 			System.out.println("IOException - Possible Keyboard Failure");
 		}
 		
-// try/catch structure option 2:
-//		while(true)  
-//		{
-//			String statement = br.readLine();
-//			if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
-//			if (statement.equals("") || statement.isEmpty()) 							// checks for blank message
-//			{
-//				System.out.println("Blank messages are ignored.");
-//			} else {																		// proceed if message is not blank
-//				try{
-//					whiteHouse.makeAstatement(statement);
-//				} catch(IOException e) {					// THIS IS NOT WHAT HE ASKED FOR BUT I DO NOT KNOW WHAT TO DO OTHERWISE!!!
-//					break;									// ???
-//				}											// how do I have the try block inside the loop but put the catch block outside the loop?!? That Makes no sense!
-//			} // end of if/else statement
-//		}
-		
 		System.out.println("The News Conference is over");
 		// (The President thread, encountering the bottom of the run() method, will return to it's Thread object and be terminated, which is appropriate!)
 	} // end of run()
 	
-	
 } // end of class
+
