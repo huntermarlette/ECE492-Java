@@ -46,7 +46,7 @@ public class StartTheNewsConference {
 			for(int i = 0; i <= args.length-1; i++)
 			// "When you're loading the Reporter objects, you can go into a for loop that iterates through the args array of command line parameters"
 			{
-				System.out.println(newline + "i = " + i);
+				//System.out.println(newline + "i = " + i);
 				//System.out.println("Topic of Interest #" + i + " = " + args[i]);
 				topic = args[i];
 				num = i;
@@ -58,13 +58,13 @@ public class StartTheNewsConference {
 				{
 					System.out.println("'God bless America' is not an acceptable topic of interest, and therefore this entry will be ignored.");	
 			 	} else {
-					System.out.println("Topic of Interest #" + num + " = " + topic);
+					//System.out.println("Topic of Interest #" + num + " = " + topic);
 					// Load a reporter object for each of the topics given
 					// passing the address of the WhiteHouse object and one of the topics-of-interest command line parameters and a reporter number to each Reporter's constructor.
 					
 					//Reporter.Reporter(num, whiteHouse, topic);
 					Reporter repo = new Reporter(num, whiteHouse, topic);
-					System.out.println("New Reporter Created?");
+					//System.out.println("New Reporter Created?");
 			 	}
 			}
 		} else {

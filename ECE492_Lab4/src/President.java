@@ -37,7 +37,7 @@ public class President implements Runnable
 		BufferedReader    br  = new BufferedReader(isr);								// setup user input from console 
 		// Not sure if this will work for: "At the top of run(), load the I/O classes to read the keyboard. (See your Therapist program.)"
 		
-		System.out.println("Reminder: The phrase 'God Bless America' ends the news conference.");
+		System.out.println(newline + "Reminder: The phrase 'God Bless America' ends the news conference.");
 		System.out.println("Enter a statement:");
 // try/catch structure option 1:
 		try {
@@ -50,6 +50,7 @@ public class President implements Runnable
 				{
 					System.out.println("Blank messages are ignored.");
 				} else {																// proceed if message is not blank
+					System.out.println("Statement: '" + statement + "'");
 					whiteHouse.makeAstatement(statement);	
 					if(statement.equals("God bless America") || statement.equals("God Bless America") || statement.equals("god bless america") || statement.equals("GOD BELSS AMERICA")) break;
 				} // end of if/else statement

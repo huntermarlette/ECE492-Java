@@ -12,11 +12,14 @@ public class WhiteHouse {	// The meeting place for reporters and speakers
 	String presidentsStatement;
 
 	
-	public void makeAstatement(String presidentsStatement) 	// pick up object's lock on entry to this method
+	public synchronized void makeAstatement(String presidentsStatement) 	// pick up object's lock on entry to this method
 	{
+		System.out.println("Test inside makeAstatement");
 		this.presidentsStatement = presidentsStatement; 	// save local method variable in instance variable
+		System.out.println("Statement: '" + presidentsStatement + "'");
 		notifyAll();   										// wake up all threads waiting in this object
 															// release object lock on exit
+		System.out.println("Test after notify");
 	} // end of function
 
 	
@@ -32,7 +35,7 @@ public class WhiteHouse {	// The meeting place for reporters and speakers
 			// I am not sure how to do this with the variables passed in - possibly referring to the print line within the reporter code after this section
 		while (true) 
 		{
-			System.out.println("Test Inside While Loop");
+			//System.out.println("Test Inside While Loop");
 			try { wait(); } // enter WAIT queue (the Reporter thread releases the object's lock so that other Reporter threads can enter)
 			catch(InterruptedException ie) 
 			{
