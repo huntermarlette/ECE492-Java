@@ -304,7 +304,38 @@ public class Lecture14_GUIcalculator implements ActionListener
     	    errorTextField.setBackground(Color.pink);
     	    return;
        		}
+        
+        
+        // find operands!
+        String leftOperand = expression.substring(0,operatorOffset).trim();
+        String rightOperand = expression.substring(operatorOffset+1).trim();
 
+        // convert operands from String to double 
+        // Note that parseDouble() will allow a unary operator!
+        double leftNumber;
+        try { 
+            leftNumber = Double.parseDouble(leftOperand);
+            }
+        catch(NumberFormatException nfe)
+            {
+            errorTextField.setText("Left operand '" + leftOperand + "' is not a proper operand.");
+            errorTextField.setBackground(Color.pink);
+            return;
+            }
+        double rightNumber;
+        try {
+            rightNumber = Double.parseDouble(rightOperand);
+            }
+        catch(NumberFormatException nfe)
+            {
+            errorTextField.setText("Right operand '" + rightOperand + "'is not a proper operand.");
+            errorTextField.setBackground(Color.pink);
+            return;
+            }
+        
+        
+        
+        
         
     } // end of actions performed
 
