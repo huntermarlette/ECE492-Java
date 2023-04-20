@@ -17,7 +17,8 @@ public class StartTheNewsConference {
 		// load the WhiteHouse and the President and multiple Reporter objects into DYNAMIC storage
 		// Once the loading is complete, the main thread will encounter the bottom of the main() method and return to the CommandLineLoader where it will be terminated
 		
-		System.out.println("Welcome to Lab 4 - News Conference by Hunter Marlette ");
+		String newline = System.getProperty("line.separator");					// declaring a line feed statement for organizing the terminal output easier
+		System.out.println("Welcome to Lab 4 - News Conference by Hunter Marlette " + newline);
 		
 		
 		
@@ -44,10 +45,13 @@ public class StartTheNewsConference {
 		// counting arguments
 		if(args.length > 0) 
 		{
-			for (int i = args.length-1; i >= 0; i++) 
+			System.out.println("Test 1");
+			//for (int i = args.length-1; i >= 0; i--) 
+			for(int i = 0; i <= args.length-1; i++)
 			{
 				System.out.println("i = " + i);
 				System.out.println("Topic of Interest #" + i + " = " + args[i]);
+				
 			}
 			
 		} else {
