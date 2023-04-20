@@ -5,25 +5,12 @@
 	// MacOS has issues with the method of GUI creation that we have been using in this class.
 	// GO BACK IN THE OLDER LABS AND CODE FILES AND FIND ALL THE TRICKS I USED THE FIRST TIME AROUND!!!	
 
-	// the program is supposed to ignore blank entries and so far it does not do that!!!
 
-
-
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-//import javax.swing.JButton;
-//import javax.swing.JFrame;
-//import javax.swing.JLabel;
-//import javax.swing.JScrollPane;
-//import javax.swing.JTextArea;
-//import javax.swing.JTextField;
-//import javax.swing.SwingConstants;
 import javax.swing.*;
 import java.awt.*;
-
 
 
 public class Lecture14_GUIcalculator implements ActionListener
