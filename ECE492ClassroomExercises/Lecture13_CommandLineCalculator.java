@@ -5,10 +5,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Lecture13_CommandLineCalculator 
-	{
+{
 
 	public static void main(String[] args) throws Exception
-		{
+	{
 		String newline = System.getProperty("line.separator");					// declaring a line feed statement for organizing the terminal output easier
 		
 		System.out.println("Welcome to the Calculator program." + newline);
@@ -123,6 +123,6 @@ public class Lecture13_CommandLineCalculator
 		
 		
 		
-		} // end of main
+	} // end of main
 
-	} // end of class
+} // end of class
