@@ -40,7 +40,7 @@ public class XexpressionCalculator implements ActionListener
 	String forXString;		// defined to prevent errors in step 14 code 
 	
 	//GUI Objects
-	private JFrame       window              = new JFrame("X Expression Calculator    Operators are + - * / ^ r X     Operands are numbers, e, pi and pa (previous answer) ");
+	private JFrame       window              = new JFrame("X Expression Calculator    Operators are + - * / ^ r     Operands are numbers, e, pi, and pa (previous answer), and X ");
 	private JButton      clearButton         = new JButton("Clear");
 	private JButton      recallButton        = new JButton("Recall");
 	private JTextField   expressionTextField = new JTextField(30);
