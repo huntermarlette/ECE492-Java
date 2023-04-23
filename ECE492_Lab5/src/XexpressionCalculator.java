@@ -2,10 +2,6 @@
 // Hunter Marlette
 // Student ID # 200289830
 
-// NOTE:
-	// MacOS has issues with the method of GUI creation that we have been using in this class.
-	// GO BACK IN THE OLDER LABS AND CODE FILES AND FIND ALL THE TRICKS I USED THE FIRST TIME AROUND!!!	
-
 
 import java.awt.event.*;
 import java.io.BufferedReader;
