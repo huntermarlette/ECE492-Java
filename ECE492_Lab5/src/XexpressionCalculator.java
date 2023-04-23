@@ -40,7 +40,7 @@ public class XexpressionCalculator implements ActionListener
 	String forXString;		// defined to prevent errors in step 14 code 
 	
 	//GUI Objects
-	private JFrame       window              = new JFrame("EXPRESSION CALCULATOR    Operators are + - * / ^ r      Operands are numbers, e, pi and pa (previous answer) ");
+	private JFrame       window              = new JFrame("X Expression Calculator    Operators are + - * / ^ r X     Operands are numbers, e, pi and pa (previous answer) ");
 	private JButton      clearButton         = new JButton("Clear");
 	private JButton      recallButton        = new JButton("Recall");
 	private JTextField   expressionTextField = new JTextField(30);
@@ -50,9 +50,10 @@ public class XexpressionCalculator implements ActionListener
 	private JLabel       forXLabel           = new JLabel("for x =", SwingConstants.RIGHT);
 	private JTextField   forXTextField       = new JTextField(8);
 	
+	// added in Lab 5:
+	//private String forXString;
 	
-	
-	public Lecture14_GUIcalculator() // CONSTRUCTOR
+	public XexpressionCalculator() // CONSTRUCTOR
 	{
 		// Build the GUI
 		// Load the topPanel and then add it to "North"
@@ -94,8 +95,8 @@ public class XexpressionCalculator implements ActionListener
 	public void actionPerformed(ActionEvent ae) // GUI objects call here
 	{
 		// watch for button and text field action in the GUI
-		errorTextField.setText("");                // clear any error message shown 
-		errorTextField.setBackground(Color.white); // for the last expression.
+		errorTextField.setText("");               	 							// clear any error message shown 
+		errorTextField.setBackground(Color.white); 								// for the last expression.
 
 		if (ae.getSource() == clearButton)
 		   {
@@ -117,8 +118,9 @@ public class XexpressionCalculator implements ActionListener
            {
            expression = expressionTextField.getText().trim().toLowerCase();		// edited line to create variable outside of function
            System.out.println("Expression '" + expression + "' was entered.");	
-	 	   String forXString        = forXTextField.getText();
-           if (expression.length() == 0) return; // ignore ENTER or blank(s)
+	 	   forXString        = forXTextField.getText();							// removed string declaration here and moved it to the instance variables...
+	 	   //System.out.println("XString : " + forXString);
+           if (expression.length() == 0) return; 								// ignore ENTER or blank(s)
            if (expression.contains("="))
               {
 		      errorTextField.setText("Expression may not contain '='");	
@@ -126,11 +128,41 @@ public class XexpressionCalculator implements ActionListener
 		      return; // back to GUI object	
 		      }
            }
-        
-        
+        // added in lab 5 step 3:
+        // I am not sure if this is the correct location or not???
+        System.out.println("Test 1");
+        if (expression.contains("x") && (forXString.length()==0)) 
+        	{
+        	System.out.println("Test 2");
+        	System.out.println("XString : " + forXString);
+        	errorTextField.setText("Expression contains x but xValue is not provided.");	
+        	   errorTextField.setBackground(Color.pink);
+        	   return;
+        	}
+        if (!expression.contains("x") && (forXString.length() > 0)) 
+        	{
+        	System.out.println("Test 3");
+        	System.out.println("XString : " + forXString);
+        	errorTextField.setText("xValue is provided but expression does not contain x.");	
+        	   errorTextField.setBackground(Color.pink);
+        	   return;
+        	}
+        //System.out.println("XString : " + forXString);
 
         String originalExpression = expression;
         //System.out.println(expression);
+        
+        // do x operand substitution in expression
+        expression = expression.replace("x", forXString);
+        System.out.println("Expression with x replaced is " + expression);
+
+        // Fix invalid unary operators caused by x substitution
+        // Fix left operand
+        if (expression.startsWith("--")) expression = expression.substring(2);
+        // Fix right operand
+        expression = expression.replace("---" ,"-");
+        expression = expression.replace("- --","-");
+        System.out.println("Expression with unary operators fixed is " + expression);
         
         // do operand substitution for e, pi and pa
         expression = expression.replace("pa", previousAnswer);
