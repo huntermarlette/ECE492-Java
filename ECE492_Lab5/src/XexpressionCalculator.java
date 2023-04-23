@@ -37,7 +37,7 @@ public class XexpressionCalculator implements ActionListener
 	// the document told me to put the instance variables in-between main and the constructor instead of at the top of the class?!?
 	
 	String expression;		// I had to add this to rectify errors with the section beginning with "String originalExpression = expression;"
-	String forXString;		// defined to prevent errors in step 14 code 
+	String forXString;		// defined to prevent errors in step 14 code and later in lab 5
 	
 	//GUI Objects
 	private JFrame       window              = new JFrame("X Expression Calculator    Operators are + - * / ^ r     Operands are numbers, e, pi, and pa (previous answer), and X ");
@@ -50,9 +50,8 @@ public class XexpressionCalculator implements ActionListener
 	private JLabel       forXLabel           = new JLabel("for x =", SwingConstants.RIGHT);
 	private JTextField   forXTextField       = new JTextField(8);
 	
-	// added in Lab 5:
-	//private String forXString;
 	
+
 	public XexpressionCalculator() // CONSTRUCTOR
 	{
 		// Build the GUI
@@ -119,7 +118,6 @@ public class XexpressionCalculator implements ActionListener
            expression = expressionTextField.getText().trim().toLowerCase();		// edited line to create variable outside of function
            System.out.println("Expression '" + expression + "' was entered.");	
 	 	   forXString        = forXTextField.getText();							// removed string declaration here and moved it to the instance variables...
-	 	   //System.out.println("XString : " + forXString);
            if (expression.length() == 0) return; 								// ignore ENTER or blank(s)
            if (expression.contains("="))
               {
@@ -129,29 +127,22 @@ public class XexpressionCalculator implements ActionListener
 		      }
            }
         // added in lab 5 step 3:
-        // I am not sure if this is the correct location or not???
-        System.out.println("Test 1");
         if (expression.contains("x") && (forXString.length()==0)) 
         	{
-        	System.out.println("Test 2");
-        	System.out.println("XString : " + forXString);
         	errorTextField.setText("Expression contains x but xValue is not provided.");	
         	   errorTextField.setBackground(Color.pink);
         	   return;
         	}
         if (!expression.contains("x") && (forXString.length() > 0)) 
         	{
-        	System.out.println("Test 3");
-        	System.out.println("XString : " + forXString);
         	errorTextField.setText("xValue is provided but expression does not contain x.");	
         	   errorTextField.setBackground(Color.pink);
         	   return;
         	}
-        //System.out.println("XString : " + forXString);
 
         String originalExpression = expression;
-        //System.out.println(expression);
         
+        // Lab 5 Step 4:
         // do x operand substitution in expression
         expression = expression.replace("x", forXString);
         System.out.println("Expression with x replaced is " + expression);
@@ -163,6 +154,7 @@ public class XexpressionCalculator implements ActionListener
         expression = expression.replace("---" ,"-");
         expression = expression.replace("- --","-");
         System.out.println("Expression with unary operators fixed is " + expression);
+        
         
         // do operand substitution for e, pi and pa
         expression = expression.replace("pa", previousAnswer);
@@ -271,8 +263,6 @@ public class XexpressionCalculator implements ActionListener
         forXTextField.setText("");       		// clear x field
         expressionTextField.requestFocus();		// set cursor in.  
         return;
-        
-        
         
     } // end of actions performed
 
