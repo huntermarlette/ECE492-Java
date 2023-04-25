@@ -97,17 +97,34 @@ public class NekoTheCat implements Runnable, MouseListener {
 		{
 		System.out.println("Run() method called");
 		// draw the images just as a test:
-		g.drawImage(catRight1,0,0,gamePanel);//imageName, x coordinate, y coordinate, where to draw
-		g.drawImage(catRight2,1*catWidth,0,gamePanel);
-		g.drawImage(catLeft1, 2*catWidth,0,gamePanel);
-		g.drawImage(catLeft2, 3*catWidth,0,gamePanel);
+		//g.drawImage(catRight1,0,0,gamePanel);//imageName, x coordinate, y coordinate, where to draw
+		//g.drawImage(catRight2,1*catWidth,0,gamePanel);
+		//g.drawImage(catLeft1, 2*catWidth,0,gamePanel);
+		//g.drawImage(catLeft2, 3*catWidth,0,gamePanel);
 		//g.drawImage(redBall,  4*catWidth,0,gamePanel);
 		
 		while(true)
 			{
-			// After the test images are printed, have the run thread enter a while(true) loop to "capture" it.
-			//g.drawImage(redBall, ballxPosition, ballyPosition, gamePanel);
-			}
+			// 1. Blank out the last image
+			g.setColor(Color.white);
+			g.fillRect(catxPosition, catyPosition, catWidth, catHeight);	//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
+			
+	        // 2. Bump the location for the new image
+			catxPosition = catxPosition + xBump;
+		    catyPosition = catyPosition;
+		    
+	        // 3. Select the next image.
+		    if (currentImage == cat1) currentImage = cat2;
+		    else                     currentImage = cat1;
+		    
+	        // 4. Draw the next cat image
+		    g.drawImage(currentImage,catxPosition,catyPosition,gamePanel);
+		    
+	        // 5. Pause briefly to let human eye see the new image!
+		    try {Thread.sleep(sleepTime);}
+		    catch(InterruptedException ie){}
+			
+			} // end of while loop
 		
 		} // end of run()
 
@@ -123,10 +140,10 @@ public class NekoTheCat implements Runnable, MouseListener {
 		g.setColor(Color.white); // set the draw color to the background color
 		g.fillRect(ballxPosition, ballyPosition, ballSize, ballSize);//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
 		
-		// retrieve mouse click position and print it to the console
+		// retrieve new mouse click position
 		ballxPosition = me.getX();
 	    ballyPosition = me.getY();
-	    System.out.println("Mouse was clicked at x=" + ballxPosition + ", y=" + ballyPosition);
+	    //System.out.println("Mouse was clicked at x=" + ballxPosition + ", y=" + ballyPosition);
 	    
 	    // draw new ball image
 	    g.drawImage(redBall, ballxPosition, ballyPosition, gamePanel);
