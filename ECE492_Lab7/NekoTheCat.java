@@ -63,7 +63,7 @@ public class NekoTheCat implements Runnable, MouseListener {
 		
 		// Show Window	
 		gameWindow.setLocation(10, 10); // horizontal, vertical
-		gameWindow.setSize(1200, 1200); // width,height in pixels
+		gameWindow.setSize(800, 800); // width,height in pixels
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setVisible(true);
 		
@@ -84,7 +84,7 @@ public class NekoTheCat implements Runnable, MouseListener {
 	
 	public static void main(String[] args) throws Exception // main method
 		{
-		new NekoTheCat();
+		new NekoTheCat();		// without this line, the program does nothing!
 		
 		} // end of main
 
@@ -116,9 +116,11 @@ public class NekoTheCat implements Runnable, MouseListener {
 	
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void mouseClicked(MouseEvent me) {
+		// retrieve mouse click position and print it to the console
+		ballxPosition = me.getX();
+	    ballyPosition = me.getY();
+	    System.out.println("Mouse was clicked at x=" + ballxPosition + ", y=" + ballyPosition);
 	}
 
 
