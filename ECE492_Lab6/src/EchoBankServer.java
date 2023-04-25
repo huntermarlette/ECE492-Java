@@ -31,20 +31,22 @@ public class EchoBankServer extends UnicastRemoteObject implements TellerServerI
 	
 	public String createNewAccount(String accountType, String customerName)
 		{
-		if(customerName.equals("Person,Bad")) return "ERROR: name is Person,Bad";		// check for "Person,Bad"
+		if(customerName.equals("Person,Bad") || customerName.equals("person,bad") || customerName.equals("PERSON,BAD")) 
+			return "ERROR: Name is Person,Bad";		// check for "Person,Bad"
 		
 		//System.out.println("Name: " + customerName);
 		System.out.println("Creating a new " + accountType + " account for " + customerName + "With Account number 12345");
-		return "Creating a new " + accountType + " account for " + customerName + "With Account number 12345";
+		return "Creating a new " + accountType + " account for " + customerName + " with Account number 12345";
 // return 12345 as the account number of the new account?!?
 		//TellerClient.accountTextField.setText("12345");		// does not work
-
+// I have no clue how exactly you want us to implement this but I took a guess...
 		} // end of method
 
 	
 	public String showAccount(int accountNumber, String customerName)
 		{
-		if(customerName.equals("Terrorist,Suspected")) return "ERROR: name is Terrorist,Suspected";		// check for "Terrorist,Suspected"
+		if(customerName.equals("Terrorist,Suspected") || customerName.equals("terrorist,suspected") || customerName.equals("TERRORIST,SUSPECTED") ) 
+			return "ERROR: Name is Terrorist,Suspected";		// check for "Terrorist,Suspected"
 		
 		// if the account number is 0 then return that ALL accounts the start with customerName will be shown, otherwise return that accountNumber xxxx will be shown for customerName.
 		if(accountNumber == 0) 
@@ -60,7 +62,7 @@ public class EchoBankServer extends UnicastRemoteObject implements TellerServerI
 	
 	public String depositToAccount(int accountNumber, double amount, String customerName) 
 		{
-		if(amount > 100000) return "ERROR: amount is > $100,000";		// check for large deposit
+		if(amount > 100000) return "ERROR: Amount is > $100,000";		// check for large deposit
 		
 		System.out.println("Depositing $" + amount + " to account #" + accountNumber + " of " + customerName);
 		return "Depositing $" + amount + " to account #" + accountNumber + " of " + customerName;
@@ -69,7 +71,7 @@ public class EchoBankServer extends UnicastRemoteObject implements TellerServerI
 	
 	public String withdrawFromAccount(int accountNumber, double amount, String customerName) 
 		{
-		if(amount < 1.00) return "ERROR: amount is < $1.00";		// check for small withdrawal
+		if(amount < 1.00) return "ERROR: Amount is < $1.00";		// check for small withdrawal
 		
 		System.out.println("Withdrawing $" + amount + " from account #" + accountNumber + " of " + customerName);
     	return "Withdrawing $" + amount + " from account #" + accountNumber + " of " + customerName;
@@ -78,7 +80,8 @@ public class EchoBankServer extends UnicastRemoteObject implements TellerServerI
 	
 	public String closeOutAccount(int accountNumber, String customerName)
 		{
-		if(customerName.equals("Bird,Jail")) return "ERROR: name is Bird,Jail";			// check for "Bird,Jail"
+		if(customerName.equals("Bird,Jail") || customerName.equals("bird,jail") || customerName.equals("BIRD,JAIL")) 
+			return "ERROR: Name is Bird,Jail";			// check for "Bird,Jail"
 		
 		System.out.println("Closing out account #" + accountNumber + " of " + customerName + " (balance must be 0)");
 		return "Closing out account #" + accountNumber + " of " + customerName + " (balance must be 0)";

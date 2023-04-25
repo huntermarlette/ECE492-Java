@@ -4,6 +4,7 @@
 // This is the main class being modified in Lab 6!
 
 // NOTE: For some reason the getShortCustomerName() Method is not functioning. It is not my job to fix this issue so I hope that it would not affect my grade. 
+		// I also had to fix a few minor issues with the GUI that were missed in the starter code
 
 
 // 'localhost' 'EchoBankServerStub'
@@ -46,7 +47,6 @@ public static void main(String[] args)
      {
      try {
          new TellerClient(args[0], args[1]);
-         //EchoBankServer server = new EchoBankServer();		// I added this for later
          }
      catch(Exception e)
          {
@@ -61,6 +61,7 @@ public static void main(String[] args)
   }
 
 // Instance Variables
+public String newline = System.getProperty("line.separator");					// declaring a line feed statement for organizing the terminal output easier
 private TellerServerInterface server;
 private String newLine = System.lineSeparator();
 
@@ -179,23 +180,27 @@ public void actionPerformed(ActionEvent ae)
 	  }
   }
 
+
+
+
+
 //*********************************************************************************
 // Methods called from actionPerformed() follow
 //*******************************************************************************
 private void createNewAccount(String accountType) throws Exception
   	{
+	notAmount("createNewAccount");
+	notAccount("createNewAccount");
+	
 	String customerName = getCustomerName("createNewAccount");
-	//String shortCustomerName = getShortCustomerName("createNewAccount");
-	System.out.println("Name: " + customerName);
-	//System.out.println("Shortened Name: " + shortCustomerName);
-	
-	//EchoBankServer server = new EchoBankServer();
-	//String CNA = server.createNewAccount(accountType, name);
-	//System.out.println("Message Returned: " + CNA);
-	
 	String serverReply = server.createNewAccount(accountType, customerName);
 	System.out.println("Message Returned: " + serverReply);
-	displayTextArea.setText(serverReply);
+	
+	if(serverReply.startsWith("ERROR:")) 
+		displayTextArea.setText("Error received. Transaction is rejected." + newline + serverReply);
+	else 
+		displayTextArea.setText(serverReply);
+	
 	if (!serverReply.startsWith("ERROR:"))
 	    transactionLogTextArea.append(newLine + serverReply);
   	} // end of method
@@ -203,19 +208,22 @@ private void createNewAccount(String accountType) throws Exception
 //*******************************************************************************
 private void showAccount() throws Exception
   	{
-	int accountNumber = getAccountNumber("ShowAccount");
+	int accountNumber = getAccountNumber("Showing an account");
 	notAmount("ShowAccount");
 	String name;
 	
 	if (accountNumber == 0) 
 		{
-		name = getShortCustomerName("showAccount");;
+		name = getShortCustomerName("Showing an account");;
 		} else {
-		name =  getCustomerName("showAccount");
+		name =  getCustomerName("Showing an account");
 		}
 	
 	String serverReply = server.showAccount(accountNumber, name);
-	displayTextArea.setText(serverReply);
+	if(serverReply.startsWith("ERROR:")) 
+		displayTextArea.setText("Error received. Transaction is rejected." + newline + serverReply);
+	else 
+		displayTextArea.setText(serverReply);
   	} // end of method
 
 //*******************************************************************************
@@ -230,7 +238,12 @@ private void processAccount(String transactionType) throws Exception
 	if (transactionType.equals("DEPOSIT")) 
 		{
 		String serverReply = server.depositToAccount(accountNumber, amount, customerName);
-		displayTextArea.setText(serverReply);
+		
+		if(serverReply.startsWith("ERROR:")) 
+			displayTextArea.setText("Error received. Transaction is rejected." + newline + serverReply);
+		else 
+			displayTextArea.setText(serverReply);
+		
 		if (!serverReply.startsWith("ERROR:"))
 	    	transactionLogTextArea.append(newLine + serverReply);
 //must clear the amount field if the transfer was successful
@@ -239,7 +252,12 @@ private void processAccount(String transactionType) throws Exception
 	if (transactionType.equals("WITHDRAW")) 
 		{
 		String serverReply = server.withdrawFromAccount(accountNumber, amount, customerName);
-		displayTextArea.setText(serverReply);
+		
+		if(serverReply.startsWith("ERROR:")) 
+			displayTextArea.setText("Error received. Transaction is rejected." + newline + serverReply);
+		else 
+			displayTextArea.setText(serverReply);
+		
 		if (!serverReply.startsWith("ERROR:"))
 	    	transactionLogTextArea.append(newLine + serverReply);
 //must clear the amount field if the transfer was successful
@@ -249,15 +267,24 @@ private void processAccount(String transactionType) throws Exception
 //********************************************************************************
 private void closeOutAccount() throws Exception
   	{
-	int accountNumber = getAccountNumber("closeOutAccount");
-	notAmount("closeOutAccount");
-	String customerName =  getCustomerName("showAccount");
+	//int accountNumber = getAccountNumber("closeOutAccount");
+	int accountNumber = getAccountNumber("closinng out an account");		// changed parameters to satisfy verification instructions
+	notAmount("closinng out an account");
+	String customerName =  getCustomerName("closinng out an account");
 	
 	String serverReply = server.closeOutAccount(accountNumber, customerName);
-	displayTextArea.setText(serverReply);
+	
+	if(serverReply.startsWith("ERROR:")) 
+		displayTextArea.setText("Error received. Transaction is ejected." + newline + serverReply);
+	else 
+		displayTextArea.setText(serverReply);
+	
 	if (!serverReply.startsWith("ERROR:"))
     	transactionLogTextArea.append(newLine + serverReply);
   	} // end of method
+
+
+
 
 //**********************************************************************************
 //* Get/Edit methods follow (these are called by the GUI-processing methods above) *    
