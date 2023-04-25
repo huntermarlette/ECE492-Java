@@ -60,6 +60,8 @@ public class NekoTheCat implements Runnable, MouseListener {
     
 	public NekoTheCat() throws Exception // CONSTRUCTOR
 		{		
+		System.out.println("Hunter Marlette's Neko The Cat Game");
+		
 		// Build the GUI
 		gameWindow.getContentPane().add(gamePanel, "Center");	// create the window
 		gamePanel.setBackground(Color.white);		// set background color
@@ -95,7 +97,7 @@ public class NekoTheCat implements Runnable, MouseListener {
 	
 	public void run() // Run() Method
 		{
-		//System.out.println("Run() method called");
+		System.out.println("Run() method called");
 		while(true)
 			{
 	    	while(true)
