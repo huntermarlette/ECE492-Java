@@ -77,8 +77,8 @@ public class NekoTheCat implements Runnable, MouseListener {
 		//NekoTheCat Neko = new NekoTheCat();
 		//Neko.start();
 		//new Thread(this).start();
-		new Thread().start();		// I have no clue if this is what I am supposed to do or not!
-		
+		//new Thread().start();		// I have no clue if this is what I am supposed to do or not!
+		new Thread(this).start(); // this just-created thread branches into our run() method, but the thread that called this "new" statement continues on!
 		} // end of constructor
 
 	
@@ -95,6 +95,7 @@ public class NekoTheCat implements Runnable, MouseListener {
 	
 	public void run() // Run() Method
 		{
+		System.out.println("Run() method called");
 		// draw the images just as a test:
 		g.drawImage(catRight1,0,0,gamePanel);//imageName, x coordinate, y coordinate, where to draw
 		g.drawImage(catRight2,1*catWidth,0,gamePanel);
