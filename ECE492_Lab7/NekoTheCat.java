@@ -6,6 +6,7 @@
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -13,6 +14,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JApplet;
 
 
 
@@ -105,33 +107,91 @@ public class NekoTheCat implements Runnable, MouseListener {
 		
 		while(true)
 			{
-			// 1. Blank out the last image
-			g.setColor(Color.white);
-			g.fillRect(catxPosition, catyPosition, catWidth, catHeight);	//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
+//			// 1. Blank out the last image
+//			g.setColor(Color.white);
+//			g.fillRect(catxPosition, catyPosition, catWidth, catHeight);	//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
+//			
+//	        // 2. Bump the location for the new image
+//			catxPosition = catxPosition + xBump;
+//		    catyPosition = catyPosition;
+//		    
+//	        // 3. Select the next image.
+//		    if (currentImage == cat1) currentImage = cat2;
+//		    else                     currentImage = cat1;
+//		    
+//	        // 4. Draw the next cat image
+//		    g.drawImage(currentImage,catxPosition,catyPosition,gamePanel);
+//		    
+//	        // 5. Pause briefly to let human eye see the new image!
+//		    try {Thread.sleep(sleepTime);}
+//		    catch(InterruptedException ie){}
 			
-	        // 2. Bump the location for the new image
-			catxPosition = catxPosition + xBump;
-		    catyPosition = catyPosition;
 		    
-	        // 3. Select the next image.
-		    if (currentImage == cat1) currentImage = cat2;
-		    else                     currentImage = cat1;
 		    
-	        // 4. Draw the next cat image
-		    g.drawImage(currentImage,catxPosition,catyPosition,gamePanel);
+	    	while(true)
+		    	{
+	    		while ((catxPosition > 0) &&  (catxPosition < gamePanel.getSize().width)) 
+		          	{
+		          	g = gamePanel.getGraphics(); // get g again in case user has resized the window! 
+		          	
+		          	// move Neko again in the current direction
+					// 1. Blank out the last image
+					g.setColor(Color.white);
+					g.fillRect(catxPosition, catyPosition, catWidth, catHeight);	//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
+					
+			        // 2. Bump the location for the new image
+					catxPosition = catxPosition + xBump;
+				    catyPosition = catyPosition;
+				    
+			        // 3. Select the next image.
+				    if (currentImage == cat1) currentImage = cat2;
+				    else                     currentImage = cat1;
+				    
+			        // 4. Draw the next cat image
+				    g.drawImage(currentImage,catxPosition,catyPosition,gamePanel);
+				    
+			        // 5. Pause briefly to let human eye see the new image!
+				    try {Thread.sleep(sleepTime);}
+				    catch(InterruptedException ie){}
+				    
+				    // oops! - turn Neko around.
+			    	if (catxPosition > (gamePanel.getSize().width - catWidth))	// I changed this to include the width of the cat so that it would bounce better on the right side
+				        {
+				        reverseDirectionFromRightToLeft();
+				        catxPosition = gamePanel.getSize().width - catWidth;
+				        }
+			     
+				    if (catxPosition < 0)
+				    	{
+				        reverseDirectionFromLeftToRight();
+				        catxPosition = 1;
+				        }
+		          	}	
+		    	}
 		    
-	        // 5. Pause briefly to let human eye see the new image!
-		    try {Thread.sleep(sleepTime);}
-		    catch(InterruptedException ie){}
-			
-			} // end of while loop
+		    
+			} // end of outer while(true) loop
 		
 		} // end of run()
 
 	
-	
-	
-	
+	private void reverseDirectionFromRightToLeft()
+	    {
+	    xBump = -xBump; // reverse increment
+	    cat1 = catLeft1;
+	    cat2 = catLeft2;
+	    catIsRunningToTheLeft  = true;
+	    catIsRunningToTheRight = false;
+	    }
+
+	private void reverseDirectionFromLeftToRight()
+	    {
+	    xBump = -xBump;	
+	    cat1 = catRight1;
+	    cat2 = catRight2;
+	    catIsRunningToTheRight = true;
+	    catIsRunningToTheLeft  = false;
+	    }
 	
 
 	@Override
