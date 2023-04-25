@@ -8,6 +8,7 @@ import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -17,8 +18,7 @@ import javax.swing.JPanel;
 
 
 
-
-public class NekoTheCat {//implements Runnable, MouseListener {
+public class NekoTheCat implements Runnable, MouseListener {
 
 	// instance variables:
 	Image catRight1 = new ImageIcon(getClass().getResource("Neko1.gif")).getImage();
@@ -53,35 +53,101 @@ public class NekoTheCat {//implements Runnable, MouseListener {
 	
     
     
-	public NekoTheCat() // CONSTRUCTOR
+	public NekoTheCat() throws Exception // CONSTRUCTOR
 		{
 		System.out.println("Building the GUI");
-		// Build the GUI
-		//gamePanel.setBackground(Color.white);
-		gameWindow.getContentPane().add(gamePanel, "Center");
-		gamePanel.setBackground(Color.white);
 		
-		// Show window	
+		// Build the GUI
+		gameWindow.getContentPane().add(gamePanel, "Center");	// create the window
+		gamePanel.setBackground(Color.white);		// set background color
+		
+		// Show Window	
 		gameWindow.setLocation(10, 10); // horizontal, vertical
 		gameWindow.setSize(1200, 1200); // width,height in pixels
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setVisible(true);
 		
 		System.out.println("GUI Built");
+		
+		g = gamePanel.getGraphics();
+		gamePanel.addMouseListener(this); // call me when a mouse action/event happens!
+		soundFile.play();		// runs sound file once - will add a loop() function Later to make this run continually
+		
+// Start an application thread in the constructor to be our animation thread in run().
+		//NekoTheCat Neko = new NekoTheCat();
+		//Neko.start();
+		//new Thread(this).start();
+		new Thread().start();		// I have no clue if this is what I am supposed to do or not!
+		
 		} // end of constructor
 
 	
-	public static void main(String[] args) // main method
+	public static void main(String[] args) throws Exception // main method
 		{
-		// TODO Auto-generated method stub
 		new NekoTheCat();
+		
 		} // end of main
 
 	
-//	public void run() // Run() Method
-//		{
-//		
-//		} // end of run()
-//	
+	
+	
+	
+	
+	public void run() // Run() Method
+		{
+		// draw the images just as a test:
+		g.drawImage(catRight1,0,0,gamePanel);//imageName, x coordinate, y coordinate, where to draw
+		g.drawImage(catRight2,1*catWidth,0,gamePanel);
+		g.drawImage(catLeft1, 2*catWidth,0,gamePanel);
+		g.drawImage(catLeft2, 3*catWidth,0,gamePanel);
+		g.drawImage(redBall,  4*catWidth,0,gamePanel);
+		
+//		while(true)
+//			{
+//			// After the test images are printed, have the run thread enter a while(true) loop to "capture" it.
+//			}
+		
+		} // end of run()
+
+	
+	
+	
+	
+	
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 } // end of class
