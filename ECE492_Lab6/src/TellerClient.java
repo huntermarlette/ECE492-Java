@@ -43,6 +43,7 @@ public static void main(String[] args)
      {
      try {
          new TellerClient(args[0], args[1]);
+         //EchoBankServer server = new EchoBankServer();		// I added this for later
          }
      catch(Exception e)
          {
@@ -71,7 +72,7 @@ private JLabel      customerNameLabel     = new JLabel("Enter customer name Last
 private JButton     closeButton           = new JButton("Close Out Account");
 private JButton     clearButton           = new JButton("Clear Screen");
 private JButton     showAccountButton     = new JButton("Show Account");
-private JButton     depositButton         = new JButton("Deposit");
+private JButton     depositButton         = new JButton("Deposit");	
 private JButton     withdrawButton        = new JButton("Withdraw");
 private JButton     openNewCheckingButton = new JButton("Create New Checking");
 private JButton     openNewSavingsButton  = new JButton("Create New Savings");
@@ -121,10 +122,10 @@ public TellerClient(String serverAddress, String rmiregistryKey) throws Exceptio
 	transactionLogTextArea.setText("Transactions for this customer in this session.");
 	displayTextArea.setFont(new Font("default", Font.BOLD, 20));
 	showAccountButton.setBackground(Color.black);
-	showAccountButton.setForeground(Color.yellow);
+	showAccountButton.setForeground(Color.black);	// this was set to Yellow instead of black which make this label hard to see so I fixed it ***
 	depositButton.setBackground(Color.blue);
 	withdrawButton.setBackground(Color.green);
-	depositButton.setForeground(Color.white);
+	depositButton.setForeground(Color.black);		// this was set to white instead of black which make the deposit label invisible so I fixed it ***
 	withdrawButton.setForeground(Color.black);
 	clearButton.setBackground(Color.yellow);
 	closeButton.setBackground(Color.red);
@@ -179,26 +180,41 @@ public void actionPerformed(ActionEvent ae)
 // Methods called from actionPerformed() follow
 //*******************************************************************************
 private void createNewAccount(String accountType) throws Exception
-  {
-
-  }
+  	{
+	String customerName = getCustomerName("createNewAccount");
+	//String shortCustomerName = getShortCustomerName("createNewAccount");
+	System.out.println("Name: " + customerName);
+	//System.out.println("Shortened Name: " + shortCustomerName);
+	
+	//EchoBankServer server = new EchoBankServer();
+	//String CNA = server.createNewAccount(accountType, name);
+	//System.out.println("Message Returned: " + CNA);
+	
+	String serverReply = server.createNewAccount(accountType, customerName);
+	System.out.println("Message Returned: " + serverReply);
+	displayTextArea.setText(serverReply);
+  	}
 
 //*******************************************************************************
 private void showAccount() throws Exception
-  {
+  	{
+	int accountNumber = getAccountNumber("ShowAccount");
+	notAmount("ShowAccount");
 	
-  }
+	//String serverReply = server.showAccount(accountNumber, customerName);
+  	}
 //*******************************************************************************
 private void processAccount(String transactionType) throws Exception  
-  {
-	
-  }
+  	{
+	//String serverReply = server.deposit(accountNumber, amount, customerName);
+	//String serverReply = server.withdraw(accountNumber, amount, customerName);
+  	}
 
 //********************************************************************************
 private void closeOutAccount() throws Exception
-  {
-	
-  }
+  	{
+	//String serverReply = server.closeOutAccount(accountNumber, customerName);
+  	}
 
 //**********************************************************************************
 //* Get/Edit methods follow (these are called by the GUI-processing methods above) *    

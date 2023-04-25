@@ -31,45 +31,58 @@ public class EchoBankServer extends UnicastRemoteObject implements TellerServerI
 	
 	public String createNewAccount(String accountType, String customerName)
 		{
-// add check for "Person,Bad" here
-		System.out.println("Name: " + customerName);
-		return "Creating a new " + accountType + " account for " + customerName;
+		if(customerName.equals("Person,Bad")) return "ERROR: name is Person,Bad";		// check for "Person,Bad"
+		
+		//System.out.println("Name: " + customerName);
+		System.out.println("Creating a new " + accountType + " account for " + customerName + "With Account number 12345");
+		return "Creating a new " + accountType + " account for " + customerName + "With Account number 12345";
 // return 12345 as the account number of the new account?!?
-		}
+		//TellerClient.accountTextField.setText("12345");		// does not work
+
+		} // end of method
 
 	
 	public String showAccount(int accountNumber, String customerName)
 		{
-// add check for "Terrorist,Suspected" here
-		System.out.println("Name: " + customerName);
-		return "Showing account #" + accountNumber + " of " + customerName;
-// if the account number is 0 then return that ALL accounts the start with customerName will be shown, otherwise return that accountNumber xxxx will be shown for customerName.
-		}
+		if(customerName.equals("Terrorist,Suspected")) return "ERROR: name is Terrorist,Suspected";		// check for "Terrorist,Suspected"
+		
+		// if the account number is 0 then return that ALL accounts the start with customerName will be shown, otherwise return that accountNumber xxxx will be shown for customerName.
+		if(accountNumber == 0) 
+			{
+			// return that ALL accounts the start with customerName will be shown
+			return "ALL accounts that start with " + customerName + "will be shown";
+			} else {
+			System.out.println("Showing account #" + accountNumber + " of " + customerName);
+			return "Showing account #" + accountNumber + " of " + customerName;
+			}
+		} // end of method
 
 	
 	public String depositToAccount(int accountNumber, double amount, String customerName) 
 		{
-// add check for large deposit here
-		System.out.println("Amount: " + amount);
+		if(amount > 100000) return "ERROR: amount is > $100,000";		// check for large deposit
+		
+		System.out.println("Depositing $" + amount + " to account #" + accountNumber + " of " + customerName);
 		return "Depositing $" + amount + " to account #" + accountNumber + " of " + customerName;
-		}
+		} // end of method
 
 	
 	public String withdrawFromAccount(int accountNumber, double amount, String customerName) 
 		{
-// add check for small withdrawal here
-		System.out.println("Amount: " + amount);
+		if(amount < 1.00) return "ERROR: amount is < $1.00";		// check for small withdrawal
+		
+		System.out.println("Withdrawing $" + amount + " from account #" + accountNumber + " of " + customerName);
     	return "Withdrawing $" + amount + " from account #" + accountNumber + " of " + customerName;
-		}
+		} // end of method
 
 	
 	public String closeOutAccount(int accountNumber, String customerName)
 		{
-// add check for "Bird,Jail" here
-		System.out.println("Name: " + customerName);
+		if(customerName.equals("Bird,Jail")) return "ERROR: name is Bird,Jail";			// check for "Bird,Jail"
+		
+		System.out.println("Closing out account #" + accountNumber + " of " + customerName + " (balance must be 0)");
 		return "Closing out account #" + accountNumber + " of " + customerName + " (balance must be 0)";
-		}
+		} // end of method
 	
-	
-}
+} // end of class
 
