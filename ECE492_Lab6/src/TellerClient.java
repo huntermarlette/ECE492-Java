@@ -3,6 +3,8 @@
 // Student ID # 200289830
 // This is the main class being modified in Lab 6!
 
+// 'localhost' 'EchoBankServerStub'
+// '127.0.0.1' 'TellerServer'
 
 import java.awt.Color;
 import java.awt.Font;
