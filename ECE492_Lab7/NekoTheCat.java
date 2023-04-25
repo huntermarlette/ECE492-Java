@@ -6,6 +6,7 @@
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -73,20 +74,23 @@ public class NekoTheCat implements Runnable, MouseListener {
 		
 		g = gamePanel.getGraphics();
 		gamePanel.addMouseListener(this); // call me when a mouse action/event happens!
-		soundFile.play();		// runs sound file once - will add a loop() function Later to make this run continually
+		soundFile.loop();		// runs sound file once - will add a loop() function Later to make this run continually
 		
-// Start an application thread in the constructor to be our animation thread in run().
-		//NekoTheCat Neko = new NekoTheCat();
-		//Neko.start();
-		//new Thread(this).start();
-		//new Thread().start();		// I have no clue if this is what I am supposed to do or not!
+		// show game instructions on the screen
+		g.setFont(new Font("Times Roman", Font.BOLD, 20)); // Font name, style, size
+		g.drawString("Neko the cat is looking for it's red ball!"         ,100,100); // String, x, y
+		g.drawString("Click the mouse to place Neko's ball."              ,100,120);
+		g.drawString("Can you move the ball to keep Neko from getting it?",100,140);
+		g.drawString("(Pull window larger to make the game easier)"       ,100,160);
+		
+		// Start an application thread in the constructor to be our animation thread in run().
 		new Thread(this).start(); // this just-created thread branches into our run() method, but the thread that called this "new" statement continues on!
 		} // end of constructor
 
 	
 	public static void main(String[] args) throws Exception // main method
 		{
-		new NekoTheCat();		// without this line, the program does nothing!
+		new NekoTheCat();
 		
 		} // end of main
 
@@ -98,38 +102,13 @@ public class NekoTheCat implements Runnable, MouseListener {
 	public void run() // Run() Method
 		{
 		System.out.println("Run() method called");
-		// draw the images just as a test:
-		//g.drawImage(catRight1,0,0,gamePanel);//imageName, x coordinate, y coordinate, where to draw
-		//g.drawImage(catRight2,1*catWidth,0,gamePanel);
-		//g.drawImage(catLeft1, 2*catWidth,0,gamePanel);
-		//g.drawImage(catLeft2, 3*catWidth,0,gamePanel);
-		//g.drawImage(redBall,  4*catWidth,0,gamePanel);
 		
 		while(true)
 			{
-//			// 1. Blank out the last image
-//			g.setColor(Color.white);
-//			g.fillRect(catxPosition, catyPosition, catWidth, catHeight);	//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
-//			
-//	        // 2. Bump the location for the new image
-//			catxPosition = catxPosition + xBump;
-//		    catyPosition = catyPosition;
-//		    
-//	        // 3. Select the next image.
-//		    if (currentImage == cat1) currentImage = cat2;
-//		    else                     currentImage = cat1;
-//		    
-//	        // 4. Draw the next cat image
-//		    g.drawImage(currentImage,catxPosition,catyPosition,gamePanel);
-//		    
-//	        // 5. Pause briefly to let human eye see the new image!
-//		    try {Thread.sleep(sleepTime);}
-//		    catch(InterruptedException ie){}
 			
-		    
-		    
 	    	while(true)
 		    	{
+	    		
 	    		while ((catxPosition > 0) &&  (catxPosition < gamePanel.getSize().width)) 
 		          	{
 		          	g = gamePanel.getGraphics(); // get g again in case user has resized the window! 
@@ -166,10 +145,42 @@ public class NekoTheCat implements Runnable, MouseListener {
 				        reverseDirectionFromLeftToRight();
 				        catxPosition = 1;
 				        }
+				    
+				    // 6. If necessary, redirect the cat toward the ball.
+			        if (ballHasBeenPlaced) // first ensure that the ball is "in play"
+			           	{
+			        	// If cat is BELOW the ball
+			        	// then move cat up 1 line. (subtract 10 pixels)
+			        	if (catyPosition > ballyPosition) 
+			        		{
+			        		g.setColor(Color.white);										// I added this because I was getting ghosting if I didn't include it here as well
+							g.fillRect(catxPosition, catyPosition, catWidth, catHeight);	//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
+			        		catyPosition = catyPosition - 10;
+			        		}
+			       	   
+			           	// If cat is ABOVE the ball 
+			    	   	// then move cat down one line. (add 10 pixels)
+			    	   	if (catyPosition < ballyPosition) 
+			    	   		{
+			    	   		g.setColor(Color.white);
+							g.fillRect(catxPosition, catyPosition, catWidth, catHeight);	//x of upper-left-corner, y of upper-left-corner, width, height.  This also does the draw!
+			    	   		catyPosition = catyPosition + 10;
+			    	   		}
+			        	   
+			           	// If the cat is running to the left
+			           	// and the ball is to the right of the cat 
+			    	   	if((catIsRunningToTheLeft  == true) && (catxPosition < ballxPosition))
+			    	   		reverseDirectionFromLeftToRight();
+			        	  
+			       	    //If the cat is running to the right
+			       	   	// and the ball is to the left of the cat 
+			    	   	if((catIsRunningToTheRight  == true) && (catxPosition > ballxPosition))
+			    	   		reverseDirectionFromRightToLeft();    
+			           	}
+				       
 		          	}	
-		    	}
-		    
-		    
+	    		
+		    	} // end of inner while(true) loop
 			} // end of outer while(true) loop
 		
 		} // end of run()
@@ -207,7 +218,7 @@ public class NekoTheCat implements Runnable, MouseListener {
 	    
 	    // draw new ball image
 	    g.drawImage(redBall, ballxPosition, ballyPosition, gamePanel);
-	    
+	    ballHasBeenPlaced = true;
 	    
 	}
 
