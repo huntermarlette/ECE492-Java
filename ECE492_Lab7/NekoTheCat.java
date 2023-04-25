@@ -5,6 +5,7 @@
 
 import java.applet.Applet;
 import java.applet.AudioClip;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseListener;
@@ -17,7 +18,7 @@ import javax.swing.JPanel;
 
 
 
-public class NekoTheCat implements Runnable, MouseListener {
+public class NekoTheCat {//implements Runnable, MouseListener {
 
 	// instance variables:
 	Image catRight1 = new ImageIcon(getClass().getResource("Neko1.gif")).getImage();
@@ -54,22 +55,33 @@ public class NekoTheCat implements Runnable, MouseListener {
     
 	public NekoTheCat() // CONSTRUCTOR
 		{
-		// TODO Auto-generated constructor stub
+		System.out.println("Building the GUI");
+		// Build the GUI
+		//gamePanel.setBackground(Color.white);
+		gameWindow.getContentPane().add(gamePanel, "Center");
+		gamePanel.setBackground(Color.white);
 		
+		// Show window	
+		gameWindow.setLocation(10, 10); // horizontal, vertical
+		gameWindow.setSize(1200, 1200); // width,height in pixels
+		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gameWindow.setVisible(true);
+		
+		System.out.println("GUI Built");
 		} // end of constructor
 
 	
 	public static void main(String[] args) // main method
 		{
 		// TODO Auto-generated method stub
-
+		new NekoTheCat();
 		} // end of main
 
 	
-	public void run() // Run() Method
-		{
-		
-		} // end of run()
-	
+//	public void run() // Run() Method
+//		{
+//		
+//		} // end of run()
+//	
 	
 } // end of class
