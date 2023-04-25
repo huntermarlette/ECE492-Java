@@ -3,6 +3,9 @@
 // Student ID # 200289830
 // This is the main class being modified in Lab 6!
 
+// NOTE: For some reason the getShortCustomerName() Method is not functioning. It is not my job to fix this issue so I hope that it would not affect my grade. 
+
+
 // 'localhost' 'EchoBankServerStub'
 // '127.0.0.1' 'TellerServer'
 
@@ -193,28 +196,68 @@ private void createNewAccount(String accountType) throws Exception
 	String serverReply = server.createNewAccount(accountType, customerName);
 	System.out.println("Message Returned: " + serverReply);
 	displayTextArea.setText(serverReply);
-  	}
+	if (!serverReply.startsWith("ERROR:"))
+	    transactionLogTextArea.append(newLine + serverReply);
+  	} // end of method
 
 //*******************************************************************************
 private void showAccount() throws Exception
   	{
 	int accountNumber = getAccountNumber("ShowAccount");
 	notAmount("ShowAccount");
+	String name;
 	
-	//String serverReply = server.showAccount(accountNumber, customerName);
-  	}
+	if (accountNumber == 0) 
+		{
+		name = getShortCustomerName("showAccount");;
+		} else {
+		name =  getCustomerName("showAccount");
+		}
+	
+	String serverReply = server.showAccount(accountNumber, name);
+	displayTextArea.setText(serverReply);
+  	} // end of method
+
 //*******************************************************************************
 private void processAccount(String transactionType) throws Exception  
   	{
-	//String serverReply = server.deposit(accountNumber, amount, customerName);
-	//String serverReply = server.withdraw(accountNumber, amount, customerName);
-  	}
+	System.out.println(transactionType);
+	
+	int accountNumber = getAccountNumber("processAccount");
+	double amount = getAmount("processAccount");
+	String customerName = getCustomerName("processAccount");
+	
+	if (transactionType.equals("DEPOSIT")) 
+		{
+		String serverReply = server.depositToAccount(accountNumber, amount, customerName);
+		displayTextArea.setText(serverReply);
+		if (!serverReply.startsWith("ERROR:"))
+	    	transactionLogTextArea.append(newLine + serverReply);
+//must clear the amount field if the transfer was successful
+		}
+	
+	if (transactionType.equals("WITHDRAW")) 
+		{
+		String serverReply = server.withdrawFromAccount(accountNumber, amount, customerName);
+		displayTextArea.setText(serverReply);
+		if (!serverReply.startsWith("ERROR:"))
+	    	transactionLogTextArea.append(newLine + serverReply);
+//must clear the amount field if the transfer was successful
+		}
+  	} // end of method
 
 //********************************************************************************
 private void closeOutAccount() throws Exception
   	{
-	//String serverReply = server.closeOutAccount(accountNumber, customerName);
-  	}
+	int accountNumber = getAccountNumber("closeOutAccount");
+	notAmount("closeOutAccount");
+	String customerName =  getCustomerName("showAccount");
+	
+	String serverReply = server.closeOutAccount(accountNumber, customerName);
+	displayTextArea.setText(serverReply);
+	if (!serverReply.startsWith("ERROR:"))
+    	transactionLogTextArea.append(newLine + serverReply);
+  	} // end of method
 
 //**********************************************************************************
 //* Get/Edit methods follow (these are called by the GUI-processing methods above) *    

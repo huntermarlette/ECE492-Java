@@ -50,9 +50,9 @@ public class EchoBankServer extends UnicastRemoteObject implements TellerServerI
 		if(accountNumber == 0) 
 			{
 			// return that ALL accounts the start with customerName will be shown
-			return "ALL accounts that start with " + customerName + "will be shown";
+			return "ALL accounts that start with " + customerName + " will be shown";
 			} else {
-			System.out.println("Showing account #" + accountNumber + " of " + customerName);
+			//System.out.println("Showing account #" + accountNumber + " of " + customerName);
 			return "Showing account #" + accountNumber + " of " + customerName;
 			}
 		} // end of method
