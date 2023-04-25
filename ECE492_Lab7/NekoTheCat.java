@@ -2,6 +2,11 @@
 // Hunter Marlette
 // Student ID # 200289830
 
+//Note: I added a few features to make the game a bit nicer than the .jar given by the professor:
+	//I added a few additional erase commands to smooth out the animation. 
+	//I also added a draw white rectangle section at the beginning of the inner while(true) loop to erase the instruction text at the beginning.
+		// there is also one under step 7 if you would rather comment out that first section and keep the text until the end. 
+
 
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -16,8 +21,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JApplet;
-
-
 
 
 
@@ -51,15 +54,12 @@ public class NekoTheCat implements Runnable, MouseListener {
     boolean ballHasBeenPlaced      = false;// initially
     
     Graphics g;
-    
     AudioClip soundFile = Applet.newAudioClip(getClass().getResource("spacemusic.au")); 
 	
     
     
 	public NekoTheCat() throws Exception // CONSTRUCTOR
-		{
-		System.out.println("Building the GUI");
-		
+		{		
 		// Build the GUI
 		gameWindow.getContentPane().add(gamePanel, "Center");	// create the window
 		gamePanel.setBackground(Color.white);		// set background color
@@ -69,8 +69,6 @@ public class NekoTheCat implements Runnable, MouseListener {
 		gameWindow.setSize(800, 800); // width,height in pixels
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setVisible(true);
-		
-		System.out.println("GUI Built");
 		
 		g = gamePanel.getGraphics();
 		gamePanel.addMouseListener(this); // call me when a mouse action/event happens!
@@ -91,26 +89,26 @@ public class NekoTheCat implements Runnable, MouseListener {
 	public static void main(String[] args) throws Exception // main method
 		{
 		new NekoTheCat();
-		
 		} // end of main
 
 	
 	
-	
-	
-	
 	public void run() // Run() Method
 		{
-		System.out.println("Run() method called");
-		
+		//System.out.println("Run() method called");
 		while(true)
 			{
-			
 	    	while(true)
 		    	{
 	    		
 	    		while ((catxPosition > 0) &&  (catxPosition < gamePanel.getSize().width)) 
 		          	{
+	    			if(ballHasBeenPlaced == true)		// I added this To delete the initial instruction text from the start screen.
+						{
+						g.setColor(Color.white);		
+						g.fillRect(80, 80, 600, 100);
+						}
+	    			
 		          	g = gamePanel.getGraphics(); // get g again in case user has resized the window! 
 		          	
 		          	// move Neko again in the current direction
@@ -178,6 +176,21 @@ public class NekoTheCat implements Runnable, MouseListener {
 			    	   		reverseDirectionFromRightToLeft();    
 			           	}
 				       
+			        // 7. Proximity test to see if Neko is "at" the ball. 
+			        if ((Math.abs(catyPosition - ballyPosition) < 10)   // y within 10   
+			        		&& (Math.abs(catxPosition - ballxPosition) < 10))  // x within 10 pixels
+			            {
+			            // Take the Neko-got-the-ball action! 
+			        	gamePanel.removeMouseListener(this);
+			        	g.setColor(Color.red);
+			        	g.setFont(new Font("Times Roman", Font.BOLD, 50)); // Font name, style, size
+			    		g.drawString("At last I have my ball!", 100, 60); // String, x, y
+			    		soundFile.stop();
+			    		
+			    		//g.setColor(Color.white);		// I added this To delete the initial text from the start screen.
+						//g.fillRect(80, 80, 600, 100);	
+			    		return;
+			            }
 		          	}	
 	    		
 		    	} // end of inner while(true) loop
